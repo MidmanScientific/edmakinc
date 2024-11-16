@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+
+</head>
+<body>
+<style>
+/* Sidebar styling */
+.sidebar {
+    height: 100vh;
+    background-color: #343a40;
+    color: #ffffff;
+    padding: 0.8rem;
+    position:fixed;
+}
+
+#uploadCourseForm, #addMainCourseForm {
+    display: none;
+    margin-top: 20px;
+}
+
+.sidebar h4 {
+    font-weight: 500;
+    margin-bottom: 1.6rem;
+    margin-top: 1.8rem;
+    font-size:18px;
+}
+
+.sidebar a {
+    color: #dddddd;
+}
+
+.sidebar a:hover {
+    color: #ffffff;
+    background-color: #495057;
+    text-decoration: none;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.card {
+    border: 1px solid #e0e0e0;
+}
+
+.card-body p {
+    margin: 0.5rem 0;
+}
+
+.btn-primary, .btn-danger, .btn-success, .btn-info {
+    transition: all 0.3s;
+}
+
+.btn-primary:hover, .btn-danger:hover, .btn-success:hover, .btn-info:hover {
+    filter: brightness(85%);
+}
+span{
+    margin-left:7%;
+    font-size: 13px;
+}
+</style>
+
+<div class="container-fluid dashboard-container">
+    <div class="row">
+<!-- Sidebar Navigation -->
+<nav class="col-md-3 col-lg-2 sidebar bg-dark text-white">
+    <h4 class="p-2 text-center">Admin Dashboard</h4>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link d-flex align-items-center" href="#user-management">
+                <i class="fas fa-users me-2"></i>
+                <span>User Management</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link d-flex align-items-center" href="#course-management">
+                <i class="fas fa-book me-2"></i>
+                <span>Course Management</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link d-flex align-items-center" href="#pending-approvals">
+                <i class="fas fa-clock me-2"></i>
+                <span>Pending Approvals</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+
+
+        <!-- Main Content Area -->
+        <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+            <!-- User Management Section -->
+<section id="user-management" class="my-4">
+    <div class="section-header">
+        <h2>Users</h2>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.profile.phone_number }}</td>
+                    <td>
+                        <!-- View User Button -->
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#viewUserModal{{ user.id }}">View</button>
+                        <!-- Delete User Button -->
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteUserModal{{ user.id }}">Delete</button>
+                    </td>
+                </tr>
+
+                <!-- View User Modal -->
+                <div class="modal fade" id="viewUserModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="viewUserModalLabel{{ user.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="viewUserModalLabel{{ user.id }}">View User</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>Username:</strong> {{ user.username }}</p>
+                                <p><strong>Email:</strong> {{ user.email }}</p>
+                                <p><strong>Phone:</strong> {{ user.profile.phone_number }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete User Modal -->
+                <div class="modal fade" id="deleteUserModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel{{ user.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteUserModalLabel{{ user.id }}">Delete User</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete the user <strong>{{ user.username }}</strong>?
+                            </div>
+                            <div class="modal-footer">
+                                <form method="post" action="{% url 'delete_user' user.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+            <!-- Course Management Section -->
+            <section id="course-management" class="my-5">
+                <div class="section-header">
+                    <h2>Course Management</h2>
+                    <button id="toggleUploadFormButton" class="btn btn-success">Upload Course</button>
+                    <button id="toggleMainCourseFormButton" class="btn btn-primary ml-2">Add Main Course</button>
+                </div>
+
+                <div id="addMainCourseForm">
+                    <form method="post" action="{% url 'add_main_course' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="mainCourseName">Main Course Name</label>
+                            <input type="text" class="form-control" id="mainCourseName" name="main_course_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="mainCourseDescription">Description</label>
+                            <textarea class="form-control" id="mainCourseDescription" name="main_course_description" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="mainCourseThumbnail">Thumbnail</label>
+                            <input type="file" class="form-control-file" id="mainCourseThumbnail" name="thumbnail" accept="image/*" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Main Course</button>
+                    </form>
+                </div>
+
+                <!-- Course Upload Form -->
+                <div id="uploadCourseForm">
+                    <form method="post" action="{% url 'upload_course' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="courseName">Course Name</label>
+                            <input type="text" class="form-control" id="courseName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="courseDescription">Description</label>
+                            <textarea class="form-control" id="courseDescription" name="description" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="mainCourseSelect">Select Main Course</label>
+                            <select class="form-control" id="mainCourseSelect" name="main_course" required>
+                                {% for main_course in main_courses %}
+                                <option value="{{ main_course.id }}">{{ main_course.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="courseVideo">Video</label>
+                            <input type="file" class="form-control-file" id="courseVideo" name="video" accept="video/*" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="courseThumbnail">Thumbnail</label>
+                            <input type="file" class="form-control-file" id="courseThumbnail" name="thumbnail" accept="image/*" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Upload Course</button>
+                    </form>
+                </div>
+
+           <!-- Course Management Section -->
+
+    <!-- Table for listing courses -->
+    <div class="table-responsive mt-4">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Course Name</th>
+                    <th>Main Course</th>
+                    <th>Description</th>
+                    <th>Thumbnail</th>
+                    <th>Video</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses reversed %}
+                <tr>
+                    <td>{{ course.courses }}</td>
+                    <td>{{ course.main_course.name }}</td>
+                    <td>{{ course.description }}</td>
+                    <td>{% if course.thumbnail %}<img src="{{ course.thumbnail.url }}" alt="Thumbnail" width="50">{% else %}No Thumbnail{% endif %}</td>
+                    <td>{% if course.video %}<a href="{{ course.video.url }}" target="_blank">View Video</a>{% else %}No Video{% endif %}</td>
+                    <td>
+                        <!-- Edit Course Button -->
+                        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editCourseModal{{ course.id }}">Edit</button>
+                        <!-- Delete Course Button -->
+                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteCourseModal{{ course.id }}">Delete</button>
+                    </td>
+                </tr>
+
+                <!-- Edit Course Modal -->
+                <div class="modal fade" id="editCourseModal{{ course.id }}" tabindex="-1" role="dialog" aria-labelledby="editCourseModalLabel{{ course.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editCourseModalLabel{{ course.id }}">Edit Course</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" action="{% url 'edit_course' course.id %}" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="editCourseName">Course Name</label>
+                                        <input type="text" class="form-control" id="editCourseName" name="name" value="{{ course.name }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="editCourseDescription">Description</label>
+                                        <textarea class="form-control" id="editCourseDescription" name="description" required>{{ course.description }}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="editCourseThumbnail">Thumbnail</label>
+                                        <input type="file" class="form-control-file" id="editCourseThumbnail" name="thumbnail" accept="image/*">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Course Modal -->
+                <div class="modal fade" id="deleteCourseModal{{ course.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteCourseModalLabel{{ course.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteCourseModalLabel{{ course.id }}">Delete Course</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete the course <strong>{{ course.name }}</strong>?
+                            </div>
+                            <div class="modal-footer">
+                                <form method="post" action="{% url 'delete_course' course.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="mt-4">
+        <h3>All Main Courses</h3>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Thumbnail</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for main_course in main_courses reversed %}
+                    <tr>
+                        <td>{{ main_course.name }}</td>
+                        <td>{{ main_course.description }}</td>
+                        <td>
+                            {% if main_course.thumbnail %}
+                            <img src="{{ main_course.thumbnail.url }}" alt="Thumbnail" width="50">
+                            {% else %}
+                            No Thumbnail
+                            {% endif %}
+                        </td>
+                        <td>
+                            <!-- Edit Button -->
+                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editMainCourseModal{{ main_course.id }}">Edit</button>
+                            <!-- Delete Button -->
+                            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteMainCourseModal{{ main_course.id }}">Delete</button>
+                        </td>
+                    </tr>
+    
+                    <!-- Edit Main Course Modal -->
+                    <div class="modal fade" id="editMainCourseModal{{ main_course.id }}" tabindex="-1" role="dialog" aria-labelledby="editMainCourseModalLabel{{ main_course.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editMainCourseModalLabel{{ main_course.id }}">Edit Main Course</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="post" action="{% url 'edit_main_course' main_course.id %}" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="mainCourseName{{ main_course.id }}">Name</label>
+                                            <input type="text" class="form-control" id="mainCourseName{{ main_course.id }}" name="main_course_name" value="{{ main_course.name }}" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="mainCourseDescription{{ main_course.id }}">Description</label>
+                                            <textarea class="form-control" id="mainCourseDescription{{ main_course.id }}" name="main_course_description" required>{{ main_course.description }}</textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="mainCourseThumbnail{{ main_course.id }}">Thumbnail</label>
+                                            <input type="file" class="form-control-file" id="mainCourseThumbnail{{ main_course.id }}" name="thumbnail" accept="image/*">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Delete Main Course Modal -->
+                    <div class="modal fade" id="deleteMainCourseModal{{ main_course.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteMainCourseModalLabel{{ main_course.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteMainCourseModalLabel{{ main_course.id }}">Delete Main Course</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete <strong>{{ main_course.name }}</strong>?
+                                </div>
+                                <div class="modal-footer">
+                                    <form method="post" action="{% url 'delete_main_course' main_course.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+
+            </section>
+
+
+
+
+            <!-- Pending Approvals Section -->
+            <section id="pending-approvals" class="my-5">
+                <div class="section-header">
+                    <h2>Pending Course Approvals</h2>
+                </div>
+                {% for request in pending_requests %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p><strong>User:</strong> {{ request.user.username }}</p>
+                        <p><strong>Course:</strong> {{ request.course.name }}</p>
+                        <form method="post" action="{% url 'approve_request' request.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Approve & Send OTP</button>
+                        </form>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No pending requests.</p>
+                {% endfor %}
+            </section>
+        </main>
+    </div>
+</div>
+
+<script>
+    document.getElementById("toggleUploadFormButton").onclick = function() {
+        var form = document.getElementById("uploadCourseForm");
+        form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
+    };
+
+    document.getElementById("toggleMainCourseFormButton").onclick = function() {
+        var form = document.getElementById("addMainCourseForm");
+        form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
+    };
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

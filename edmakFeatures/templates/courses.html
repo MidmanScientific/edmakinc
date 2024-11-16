@@ -1,0 +1,249 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Courses</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+      * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+span {
+  color: #3b631e;
+  font-family: "Merienda", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Navbar Styling */
+.navbar {
+  background-color: #f8f9fa;
+  padding: 4px;
+}
+
+.navbar-brand .logo {
+  height: 50px;
+  width: 70px;
+}
+
+.navbar .nav-item .btn {
+  background-color: #001730;
+  color: #fcfbfb;
+  width: 110px;
+  height: 40px;
+  border-radius: 0px;
+}
+
+.navbar .nav-item .btn:hover{
+background-color: #a15b05;
+}
+
+
+.navbar .nav-link {
+  color: #333;
+
+
+}
+
+.navbar .nav-link:hover {
+  background-color: #a15b05;
+  color: #fcfbfb;
+  width: 110px;
+  height: 40px;
+  border-radius: 0px;
+  text-align: center;
+}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #bef0ff;
+            padding: 2rem 0;
+            margin-top: 50px;
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        .header-text {
+            flex: 1;
+            padding: 1rem;
+            max-width: 600px;
+        }
+        .header-text h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .header-text p {
+            font-size: 1.1rem;
+            color: #001730;
+            margin-top: 0.5rem;
+        }
+        .header-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            padding: 1rem;
+            max-width: 400px;
+        }
+        .header-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .course-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .course-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 280px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .course-card:hover {
+            transform: scale(1.05);
+        }
+        .course-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .course-card-body {
+            padding: 1rem;
+        }
+        .course-card-body h3 {
+            font-size: 1.0rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .course-card-body p {
+            font-size: 0.7rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        .course-card-footer {
+            padding: 1rem;
+            background-color: #f7f9fc;
+        }
+        .request-access-btn {
+            color: #fff;
+            background-color: #001730;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .request-access-btn:hover {
+            background-color: #001730af;
+            color:white;
+        }
+        /* Responsive Design Adjustments */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            .header-text, .header-image {
+                max-width: 100%;
+            }
+            .header-text h2 {
+                font-size: 2rem;
+            }
+            .course-card {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="{% static 'edmak2-removebg.png' %}" alt="Edmak Inc." class="logo">
+            <h4 class="ms-0.4"><span>Edmak Inc.</span></h4>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto gap-4">
+                {% if user.is_authenticated %}
+                <li class="nav-item"><a class="btn ms-2 btn-danger text-white" href="{% url 'logout' %}">Logout</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'chat' %}">Community</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about-programs">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                <li class="nav-item"><a class="btn" href="{% url 'login' %}">Login</a></li>
+                <li class="nav-item"><a class="btn ms-2" href="{% url 'register' %}">Enroll Now</a></li>
+
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'chat' %}">Community</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about-programs">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                <li class="nav-item"><a class="btn" href="{% url 'login' %}">Login</a></li>
+                <li class="nav-item"><a class="btn ms-2" href="{% url 'register' %}">Enroll Now</a></li>
+                
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="header">
+    <div class="container">
+        <div class="header-content">
+            <div class="header-text">
+                <h2>Explore Top-rated Programs</h2>
+                <p>Whether you're starting your career, looking to switch to a new one, or trying to advance to the next level, experts are here to help. Get the in-demand career skills you need on your own schedule.</p>
+            </div>
+            <div class="header-image">
+                <img src="{% static 'IMG-20241105-WA0004-removebg-preview.png' %}" alt="Program Representative Image">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h3 class="text-center my-4">Prepare for a New Career</h3>
+    <div class="course-container">
+        {% for main_course in main_courses %}
+        <div class="course-card">
+            <img src="{{ main_course.thumbnail.url }}" alt="{{ main_course.name }}">
+            <div class="course-card-body">
+                <h3>{{ main_course.name }}</h3>
+                <p>{{ main_course.description }}</p>
+            </div>
+            <div class="course-card-footer">
+                <a href="{% url 'request_access' main_course.id %}" class="btn request-access-btn">Request Access</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

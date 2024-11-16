@@ -1,0 +1,381 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional E-Learning Homepage</title>
+  <link rel="stylesheet" href="{% static 'home.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="{% static 'edmak2-removebg.png' %}" alt="Edmak Inc." class="logo">
+            <h4 class="ms-0.4"><span>Edmak Inc.</span></h4>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto gap-4">
+                {% if user.is_authenticated %}
+                <li class="nav-item"><a class="btn ms-2 btn-danger text-white" href="{% url 'logout' %}">Logout</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'chat' %}">Community</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about-programs">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                <li class="nav-item"><a class="btn" href="{% url 'login' %}">Login</a></li>
+                <li class="nav-item"><a class="btn ms-2" href="{% url 'register' %}">Enroll Now</a></li>
+
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'chat' %}">Community</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about-programs">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                <li class="nav-item"><a class="btn" href="{% url 'login' %}">Login</a></li>
+                <li class="nav-item"><a class="btn ms-2" href="{% url 'register' %}">Enroll Now</a></li>
+                
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+  <!-- Hero Section -->
+  <header class="hero-section text-center">
+    <div class="container hero-content">
+      <div class="row align-items-center">
+        <div class="col-md-6 text-md-start text-center hero-text">
+          <h1 class="hero-title">Welcome to <span>Edmak Inc.</span> – Where Creativity Meets Technology</h1>
+          <p class="hero-subtitle">
+            At <span>Edmak Inc.</span>, we’re driven by a mission to inspire and empower the next generation of tech leaders and creatives. We bring together industry experts and passionate learners in a dynamic e-learning environment, where technology and creativity meet to shape the future.
+          </p>
+          <p class="text-muted"><em>Ready to Begin an Exciting Journey?</em></p>
+          <a href="{%  url 'register' %}" class="btn btn-lg mt-3">Enroll Now</a>
+        </div>
+
+        <!-- Animated Image -->
+        <div class="col-md-6 text-center">
+          <img src="{% static 'IMG-20241105-WA0008-removebg-preview.png' %}" alt="Student" class="hero-image">
+        </div>
+      </div>
+
+      <!-- Animated Icons -->
+      <div class="icon-container">
+        <div class="icon1 html-icon">HTML</div>
+        <div class="icon1 css-icon">CSS</div>
+        <div class="icon1 js-icon">JavaScript</div>
+        <div class="icon1 django-icon">Django</div>
+        <div class="icon1 python-icon">Python</div>
+      </div>
+    </div>
+  </header>
+      <!-- About Our Programs Section -->
+      <section id="about-programs" class="about-programs container text-center mt-5 mb-5">
+        <h2>About Our Programs</h2>
+        <p class="mb-5">Begin Your Tech Career With an Exciting Journey</p>
+
+        <div class="row">
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="program-item">
+                    <i class="fas fa-shield-alt icon"></i>
+                    <p class="label">Required Experience</p>
+                    <h4>None</h4>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="program-item">
+                    <i class="fas fa-calendar-alt icon"></i>
+                    <p class="label">Cost Range Per Month</p>
+                    <h4>Gh150 - Gh400 </h4>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="program-item">
+                    <i class="fas fa-hourglass-half icon"></i>
+                    <p class="label">Program Duration</p>
+                    <h4>6-12 Months</h4>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="program-item">
+                    <i class="fas fa-calendar-check icon"></i>
+                    <p class="label">Application Deadline</p>
+                    <h4>Ongoing</h4>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="program-item">
+                    <i class="fas fa-clock icon"></i>
+                    <p class="label">Weekly Commitment</p>
+                    <h4>10-16 hours</h4>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="program-item">
+                    <i class="fas fa-user-friends icon"></i>
+                    <p class="label">1-on-1 Mentorship</p>
+                    <h4>Weekly Sessions</h4>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="program-item">
+                    <i class="fas fa-code icon"></i>
+                    <p class="label">Live Coding Sessions</p>
+                    <h4>Once a Week</h4>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="program-item">
+                    <i class="fas fa-certificate icon"></i>
+                    <p class="label">Certification</p>
+                    <h4>Completion</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+           <!-- All-in-One Learning Experience Section -->
+    <section class="learning-experience container-fluid py-5">
+      <div class="container d-flex flex-column flex-lg-row align-items-center">
+          <div class="image-wrapper">
+              <img src="{% static 'all-removebg-preview.png'%}" alt="Learning Experience" class="rounded img-fluid">
+          </div>
+          <div class="text-content ml-lg-5 mt-4 mt-lg-0">
+              <h2 class="section-title">All-in-one learning experience</h2>
+              <p class="section-subtitle">Here's how our program works: the latest curriculums, responsive mentoring, and career guidance. Gain skills in a 100% online program.</p>
+              <h3 class="gain-title">What you will gain</h3>
+              <ul class="benefits-list mt-3">
+                  <li><strong>Accelerated Learning:</strong> Quickly master full-stack development with a targeted curriculum designed to help you build essential skills in a compact timeframe.</li>
+                  <li><strong>Hands-on Projects:</strong> Engage in impactful projects, developing websites and apps that address real-world challenges and prepare you for industry expectations.</li>
+                  <li><strong>Professional Guidance:</strong> Receive mentorship from industry experts who are there to support you at every stage, offering insights and expertise to fuel your success.</li>
+              </ul>
+              <a href="{%  url 'register' %}" class="btn  mt-4">Begin Now!</a>
+          </div>
+      </div>
+  </section>
+
+  <section class="faq-section py-5" id="faq">
+    <div class="container">
+        <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                        What courses does Edmak Inc. offer?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        We offer courses in Programming, Software Development, Robotics, Graphic Design, Data Manipulation with Microsft Suite and many more.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                        Do I need prior programming experience to join the programs?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        No, our courses cater to both beginners and advanced learners.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                      What programming languages does Edmak Inc. cover ?
+                  </button>
+              </h2>
+              <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                      We cover lists of programming languages such as C++, Java, C#, Python and many more
+                  </div>
+              </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                    Can I make request for an in person Tution ?
+                </button>
+            </h2>
+            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    For in person Tution, contact the following numbers for more information (+233 558339481, +233 591059917)
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                  Can you specify the courses ?
+              </button>
+          </h2>
+          <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                <span><li>Programming with C++ , C# , Python , Java and many more</li> <br>
+                 <li> Frontend Development with HTML, CSS, JavaScript and Bootstrap frontend framework </li><br>
+                 <li> Backend Development </li> <br> 
+                 <li>full-stack </li> <br>
+                 <li>Robotics </li><br>
+                 <li>Graphic Design</li></span>
+              </div>
+          </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                How do I access the course after registration
+            </button>
+        </h2>
+        <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+             You will be redirected to an OTP page. After admin confirms your request, an OTP will be snt to the OTP page. <br>
+             For Faster response, you can reach out to us on (+233 558339481)
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
+              Are the courses Free to access ?
+          </button>
+      </h2>
+      <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+        The courses are paid courses, and can only be accessed if the admin confirms your payment <br>
+        For more information contact us on (+233 558339481, +233 535956292, +233 591059917)
+          </div>
+      </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">
+            Can I seek for support or report whenever I face difficulties ?
+        </button>
+    </h2>
+    <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+        <div class="accordion-body">
+            Yes, you can report any issue on our community live chat.
+        </div>
+    </div>
+</div>
+            <!-- Repeat similar structure for other FAQ items -->
+        </div>
+    </div>
+  </section>
+  
+  <section class="future-section py-5">
+    <div class="container">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-lg-6 text-center text-lg-start">
+          <h2 class="section-title">Ready to Shape Your Future With Code?</h2>
+          <p class="section-subtitle">
+            Join us and turn your passion into a powerful career. Start building the skills you need today, and watch your dreams take shape one line of code at a time.
+          </p>
+          <a href="{%  url 'register' %}" class="btn  mt-3">Enroll Now!</a>
+        </div>
+        <div class="col-lg-6 text-center">
+          <img src="{% static 'IMG-20241106-WA0005-removebg-preview.png' %}" alt="Illustration" class="illustration-img">
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer bg-dark text-light py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Logo and Description -->
+            <div class="col-md-3 mb-4">
+                <h5 class="footer-logo">
+                    <span>Edmak Inc.</span>
+                </h5>
+                <p>Where Creativity Meets Technology</p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-md-2 mb-4">
+                <h6>Quick Links</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{%  url 'homepage' %}" class="text-light">Home</a></li>
+                    <li><a href="{%  url 'register' %}" class="text-light">Enrol Now</a></li>
+                    <li><a href="#faq" class="text-light">FAQ</a></li>
+                </ul>
+            </div>
+
+            <!-- Resources -->
+            <div class="col-md-2 mb-4">
+                <h6>Resources</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{%  url 'chat' %}" class="text-light">Community</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Us -->
+            <div class="col-md-3 mb-4">
+                <h6>Contact Us</h6>
+                <p>edmakinc@gmail.com</p>
+                <p><i class="fas fa-phone-alt"></i> +233 558 339 481</p>
+                <p><i class="fas fa-map-marker-alt"></i> Takoradi, Ghana</p>
+            </div>
+
+            <!-- WhatsApp Channel -->
+            <div class="col-md-2">
+                <div class="whatsapp-box p-3 text-center">
+                    <i class="fab fa-whatsapp fa-2x text-light"></i>
+                    <h6 class="mt-2 text-light">Join our WhatsApp Channel</h6>
+                    <p class="small text-light">Stay tuned for more and oustanding updates</p>
+                    <a href="https://wa.me/+233558339481" target="_blank" class="btn btn-success">Chat Us Now!</a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <p>&copy; 2024 <span>Edmak Inc.</span> All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom JavaScript for Animations -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const elements = document.querySelectorAll('.hero-title, .hero-subtitle, .btn-primary, .hero-image, .icon');
+      elements.forEach((element, index) => {
+        element.style.animationDelay = `${index * 0.3}s`;
+        element.classList.add('fade-in');
+      });
+    });
+  </script>
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const accordionButtons = document.querySelectorAll(".accordion-button");
+
+  accordionButtons.forEach(button => {
+      button.addEventListener("click", function () {
+          const icon = this.querySelector(".rotate-icon");
+          icon.classList.toggle("rotate-icon");
+      });
+  });
+});
+</script>
+
+</body>
+</html>

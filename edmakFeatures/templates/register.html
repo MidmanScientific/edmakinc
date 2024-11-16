@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .registration-container {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 900px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .welcome-section {
+            background: #bef0ff;
+            color: #fff;
+            padding: 40px;
+            flex: 1 1 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-radius: 10px 0 0 10px;
+        }
+        .welcome-section h2 {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .welcome-section p {
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+        .feature-list {
+            margin-top: 20px;
+        }
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        .feature-list li i {
+            color: #001730;
+            margin-right: 8px;
+        }
+        .form-section {
+            flex: 1 1 50%;
+            padding: 40px;
+        }
+        .form-section h3 {
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .form-control {
+            border-radius: 5px;
+            border-color: #ced4da;
+            font-size: 0.9rem;
+        }
+        .form-control:focus {
+            border-color: #6236ff;
+            box-shadow: 0 0 5px rgba(98, 54, 255, 0.3);
+        }
+        .btn-primary {
+            background-color: #001730;
+            border: none;
+            font-weight: bold;
+            font-size: 1rem;
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .btn-primary:hover {
+            background-color: #001730b3;
+            color:white;
+        }
+
+
+        .text-muted a {
+            color: #6236ff;
+            text-decoration: none;
+        }
+        .text-muted a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .registration-container {
+                flex-direction: column;
+            }
+            .welcome-section {
+                border-radius: 10px 10px 0 0;
+                text-align: center;
+            }
+        }
+        .welcome-section h2,p,li{
+            color:#001730;
+        }
+        .welcome-section h2{
+            color:#001730;
+        }
+        .form-section h3 {
+            color:#001730;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="registration-container">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h2>Prepare For An Interesting journey</h2>
+                <p>Begin or Resume your steps through this Jouney. Register Now!</p>
+                <ul class="feature-list list-unstyled">
+                    <li><i class="fas fa-user-check"></i> Personalized and Excellent Learning Strategy</li>
+                    <li><i class="fas fa-certificate"></i>Well Recognizd Certification</li>
+                    <li><i class="fas fa-laptop-code"></i> Friendly Coding Challenges</li>
+                </ul>
+            </div>
+            <!-- Form Section -->
+            <div class="form-section">
+                <h3>Access Your Learning Hub</h3>
+                <form method="post" action="{% url 'register' %}">
+                    {% csrf_token %}
+                    {% if messages %}
+                        <div class="alert alert-danger">
+                            {% for message in messages %}
+                                <p>{{ message }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- Username Field -->
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                    </div>
+
+                    <!-- Phone Number Field -->
+                    <div class="form-group">
+                        <label for="phone_number">Phone Number</label>
+                        <input type="text" class="form-control" id="phone_number" name="phone_number" required>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label for="password">Enter password</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            </div>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div class="form-group">
+                        <label for="password1">Confirm Password</label>
+                        <input type="password" class="form-control" id="password1" name="password1" required>
+                    </div>
+
+                    <!-- Remember Me and Submit Button -->
+               
+
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+                <p class="text-muted mt-3">Already have an account? <a href="{% url 'login' %}">Login here</a>.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

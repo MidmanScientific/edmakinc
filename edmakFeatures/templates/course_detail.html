@@ -1,0 +1,299 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.name }} - Course Details</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap" rel="stylesheet">
+    <style>
+        
+/* Body styling */
+
+
+body {
+            font-family: "Poppins", sans-serif;
+            background-color: #f9f9f9;
+            color: #2d3898;
+            padding: 10px;
+        }
+
+        
+  /* Navbar Styling */
+  .navbar {
+    background-color: #f8f9fa;
+    padding: 7px;
+  }
+  
+  .navbar-brand .logo {
+    height: 50px;
+    width: 70px;
+  }
+  
+  .navbar .nav-item .btn {
+    background-color: #001730;
+    color: #fcfbfb;
+    width: 110px;
+    height: 40px;
+    border-radius: 0px;
+  }
+  
+
+  
+  .navbar .nav-link {
+    color: #333;
+  
+  
+  }
+  
+  .navbar .nav-link:hover {
+    
+    color: #a15b05;
+
+  }
+        
+        /* Container and video styling */
+        .container {
+            max-width: 1200px;
+            margin-top: 10px;
+            
+        }
+        .course-container {
+            margin-top:20%;
+            transition: transform 0.3s;
+            text-align: center;
+            padding: 7px;
+            margin-bottom: 0px;
+            box-shadow: 17px 3px 17px  rgba(61, 61, 61, 0.1);
+            border-radius: 4px;
+            
+        }
+        .course-container:hover {
+            transform: scale(1.05);
+        }
+
+        .course-media {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            border-radius:4px;
+            overflow: hidden;
+             
+        }
+
+        .course-video, .video-thumbnail-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .course-video {
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .video-thumbnail-overlay {
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Course title and description */
+        .course-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2d3898;
+            margin: 5px 0;
+        }
+
+        .course-description {
+            font-size: 0.65rem;
+            color: #001730;
+            margin-bottom: 5px;
+        }
+        .timer-warning {
+    display: none;
+    background-color: #ff9800;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1rem;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="{% static 'edmak2-removebg.png' %}" alt="Edmak Inc." class="logo">
+            <h4 class="ms-0.4"><span>Edmak Inc.</span></h4>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto gap-4">
+                {% if user.is_authenticated %}
+                <li class="nav-item"><a class="btn ms-2 btn-danger text-white" href="{% url 'logout' %}">Logout</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'chat' %}">Community</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about-programs">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                <li class="nav-item"><a class="btn" href="{% url 'login' %}">Login</a></li>
+                <li class="nav-item"><a class="btn ms-2" href="{% url 'register' %}">Enroll Now</a></li>
+
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'chat' %}">Community</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about-programs">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                <li class="nav-item"><a class="btn" href="{% url 'login' %}">Login</a></li>
+                <li class="nav-item"><a class="btn ms-2" href="{% url 'register' %}">Enroll Now</a></li>
+                
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+  
+
+    <div class="container">
+        <div class="row">
+            {% for course in courses %}
+            <div class="col-md-4">
+                <div class="course-container">
+                    <div class="course-media">
+                        <!-- Video Player with Download Disabled -->
+                        <video id="courseVideo{{ forloop.counter }}" class="course-video" controls controlslist="nodownload">
+                            <source src="{{ course.video.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+    
+                        <!-- Overlay Thumbnail -->
+                        <div id="thumbnailOverlay{{ forloop.counter }}" 
+                             class="video-thumbnail-overlay" 
+                             style="background-image: url('{{ course.thumbnail.url }}');"></div>
+                    </div>
+                    <h2 class="course-title">{{ course.courses }}</h2>
+                    <p class="course-description">{{ course.description }}</p>
+                    {% if otp_verified %}
+                    <div class="alert alert-warning">
+                        You need to verify your OTP to access the course details.
+                        <a href="{% url 'otp_entry' %}" class="alert-link">Click here to verify</a>.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div id="timerWarning" class="timer-warning">
+        Inactivity detected. Move your mouse or press any key to stay active!
+    </div>
+    
+
+<script>
+    // Variables for inactivity and warning timeouts
+    let inactivityTimeout, warningTimeout;
+    const inactiveFor4Minutes = 20 * 60 * 1000; // 4 minutes in milliseconds
+    const warningFor30Seconds = inactiveFor4Minutes - 30000; // Show warning 30 seconds before timeout
+
+    // Function to freeze the screen by disabling user interactions
+    const freezeScreen = () => {
+        document.body.style.pointerEvents = "none";
+        document.body.style.opacity = "0.5";
+    };
+
+    // Redirect function to OTP entry page
+    const redirectToOtpEntry = () => {
+        window.location.href = "{% url 'otp_entry' %}";
+    };
+
+    // Show timer warning
+    const showWarning = () => {
+        const timerWarning = document.getElementById("timerWarning");
+        timerWarning.style.display = "block";
+    };
+
+    // Hide timer warning
+    const hideWarning = () => {
+        const timerWarning = document.getElementById("timerWarning");
+        timerWarning.style.display = "none";
+    };
+
+    // Start the inactivity timer
+    const startInactivityTimer = () => {
+        clearTimeout(inactivityTimeout);
+        clearTimeout(warningTimeout);
+        hideWarning();
+
+        warningTimeout = setTimeout(showWarning, warningFor30Seconds);
+        inactivityTimeout = setTimeout(() => {
+            sessionStorage.setItem("inactive", "true");
+            freezeScreen();
+        }, inactiveFor4Minutes);
+    };
+
+    // Check session storage for inactivity flag upon page load
+    if (sessionStorage.getItem("inactive") === "true") {
+        sessionStorage.removeItem("inactive");
+        redirectToOtpEntry();
+    }
+
+    // Reset timer on user actions
+    window.onload = startInactivityTimer;
+    document.onmousemove = startInactivityTimer;
+    document.onkeypress = startInactivityTimer;
+    document.onscroll = startInactivityTimer;
+    document.onclick = startInactivityTimer;
+
+   
+</script>
+<script>
+        document.querySelectorAll(".course-video").forEach((video, index) => {
+        const overlay = document.getElementById(`thumbnailOverlay${index + 1}`);
+
+        video.addEventListener("play", () => {
+            overlay.style.opacity = 0;
+            setTimeout(() => {
+                overlay.style.display = "none";
+            }, 300);
+        });
+
+        overlay.addEventListener("click", () => {
+            video.play();
+        });
+    });
+</script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

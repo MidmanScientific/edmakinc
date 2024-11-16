@@ -1,0 +1,315 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Chat</title>
+
+    
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f0f0f0;
+            
+         }
+            
+            .navbar {
+            background-color: #f8f9fa;
+           padding: 15px;
+           }
+  
+  .navbar-brand .logo {
+    height: 50px;
+    width: 70px;
+  }
+
+  .major {
+    color: #3b631e;
+    font-family: "Merienda", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  .navbar .nav-item .btn {
+    background-color: #001730;
+    color: #fcfbfb;
+    width: 110px;
+    height: 40px;
+    border-radius: 0px;
+  }
+  
+  .navbar .nav-item .btn:hover{
+  background-color: #a15b05;
+  }
+  
+  
+  .navbar .nav-link {
+    color: #333;
+  
+  
+  }
+  
+  .navbar .nav-link:hover {
+    background-color: #a15b05;
+    color: #fcfbfb;
+    width: 110px;
+    height: 40px;
+    border-radius: 0px;
+    text-align: center;
+  }
+
+
+        .chat-container { 
+            max-width: 700px; 
+            margin: 30px auto; 
+            background: #fff;
+            margin-top: 12%; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); }
+        .chat-header { 
+            font-size: 1.5em; 
+            font-weight: bold; 
+            text-align: center; 
+            margin-bottom: 20px; }
+        .chat-messages { 
+            max-height: 450px; 
+            overflow-y: auto; 
+            border-radius: 5px; 
+            padding: 15px; 
+            background: #fafafa; }
+        .chat-message {
+             display: flex; 
+             align-items: flex-start; 
+             margin-bottom: 10px; }
+        .message-content {
+             border-radius: 8px; 
+             padding: 10px 15px; 
+             max-width: 75%;
+             font-size:11px;
+             }
+        .message-other { 
+            background-color: #e2e2e2; 
+            color: #333;
+            font-size:11px;
+         }
+        .message-self { 
+            background-color: #9ea0ff; 
+            color: white; 
+            margin-left: auto; 
+            font-size:11px;
+        }
+        .timestamp { 
+            font-size: 0.75em; 
+            color: #333; 
+            margin-top: 5px; 
+            text-align: right;
+            font-size:11px;
+         }
+        .reply-icon {
+            cursor: pointer; 
+            font-size: 0.85em;
+            color: #333; 
+            margin-left: 8px;
+            font-size:11px; }
+        .chat-input {
+            display: flex;
+            gap: 10px;
+            padding-top: 10px; }
+        .chat-input input { 
+            flex-grow: 1;
+            border-radius: 20px;
+            padding: 10px 15px;
+            border: 1px solid #ddd; }
+        .chat-input button { 
+            background: #9ea0ff; 
+            color: white; 
+            border: none; 
+            border-radius: 50%;
+            padding: 10px 15px; }
+        .reply-preview {
+             background-color: #f1f1f1; 
+             padding: 8px;
+             border-radius: 5px;
+              margin-bottom: 10px;
+               color: #555; }
+        .replied-info { 
+             font-size: 0.85em;
+             color: #333;
+             margin-bottom: 5px; 
+             font-size:11px;}
+        #loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3; /* Light grey */
+            border-top: 3px solid #3498db; /* Blue */
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+      <!-- Navbar -->
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="{% static 'edmak2-removebg.png' %}" alt="Edmak Inc." class="logo">
+            <h4 class="ms-0.4"><span>Edmak Inc.</span></h4>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto gap-4">
+                {% if user.is_authenticated %}
+                <li class="nav-item"><a class="btn ms-2 btn-danger text-white" href="{% url 'logout' %}">Logout</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'chat' %}">Community</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about-programs">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                <li class="nav-item"><a class="btn" href="{% url 'login' %}">Login</a></li>
+                <li class="nav-item"><a class="btn ms-2" href="{% url 'register' %}">Enroll Now</a></li>
+
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'chat' %}">Community</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about-programs">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                <li class="nav-item"><a class="btn" href="{% url 'login' %}">Login</a></li>
+                <li class="nav-item"><a class="btn ms-2" href="{% url 'register' %}">Enroll Now</a></li>
+                
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container chat-container">
+    <div class="chat-header">Community Chat</div>
+
+    <!-- Reply preview box -->
+    <div id="reply-preview" class="reply-preview d-none">
+        <span id="reply-message"></span>
+        <span id="cancel-reply" class="text-danger" style="cursor: pointer;">&times;</span>
+    </div>
+
+    <div id="chat-messages" class="chat-messages"></div>
+
+    <form id="chat-form" class="chat-input" method="post">
+        {% csrf_token %}
+        <input type="text" id="message-input" name="message" placeholder="Type a message..." required>
+        <button type="submit" id="send-button">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+        <div id="loading-spinner"></div>
+    </form>
+</div>
+
+<script>
+    const chatMessagesContainer = document.getElementById('chat-messages');
+    const chatForm = document.getElementById('chat-form');
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const replyPreview = document.getElementById('reply-preview');
+    const replyMessage = document.getElementById('reply-message');
+    let replyTo = null;
+
+    setInterval(fetchMessages, 200000);
+
+    function fetchMessages() {
+        loadingSpinner.style.display = 'block';
+        fetch("{% url 'get_chat_messages' %}")
+            .then(response => response.json())
+            .then(data => {
+                chatMessagesContainer.innerHTML = '';
+                data.messages.forEach(msg => {
+                    const msgDiv = document.createElement('div');
+                    msgDiv.className = 'chat-message d-flex flex-column';
+                    const messageClass = msg.is_self ? 'message-self' : 'message-other';
+                    
+                    let repliedInfo = '';
+                    if (msg.reply_to) {
+                        repliedInfo = `<div class="reply-to small text-muted"><strong>${msg.reply_to.user}</strong>: "${msg.reply_to.text}"</div>`;
+                    }
+
+                    msgDiv.innerHTML = `
+                        <div class="message-content ${messageClass}">
+                            ${repliedInfo}
+                            <span class="user"><strong>${msg.user}</strong>:</span>
+                            <span class="text">${msg.text}</span>
+                            <div class="timestamp">${msg.timestamp}</div>
+                            <span class="reply-icon" onclick="setReply('${msg.id}', '${msg.text}')">
+                                <i class="fas fa-reply"></i> Reply
+                            </span>
+                        </div>
+                    `;
+                    chatMessagesContainer.appendChild(msgDiv);
+                });
+                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+            })
+            .catch(error => console.error('Error fetching messages:', error))
+            .finally(() => loadingSpinner.style.display = 'none');
+    }
+
+    chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        sendButton.disabled = true;
+        loadingSpinner.style.display = 'block';
+
+        const message = messageInput.value;
+        const data = { message: message };
+
+        if (replyTo) data.reply_to = replyTo;
+
+        fetch("{% url 'chat' %}", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': "{{ csrf_token }}" },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'Message sent successfully') {
+                messageInput.value = '';
+                replyTo = null;
+                replyPreview.classList.add('d-none');
+                fetchMessages();
+            }
+        })
+        .catch(error => console.error('Error sending message:', error))
+        .finally(() => {
+            sendButton.disabled = false;
+            loadingSpinner.style.display = 'none';
+        });
+    });
+
+    function setReply(messageId, messageText) {
+        replyTo = messageId;
+        replyMessage.innerText = `Replying to: "${messageText}"`;
+        replyPreview.classList.remove('d-none');
+    }
+
+    document.getElementById('cancel-reply').addEventListener('click', () => {
+        replyTo = null;
+        replyPreview.classList.add('d-none');
+    });
+
+    fetchMessages();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
