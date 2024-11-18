@@ -9,9 +9,6 @@ from .models import (
     Reply,
 )
 
-# Register models without custom admin logic
-admin.site.register(CourseRequest)
-
 # Function to reset sequence for a given table
 def reset_sequence(table_name):
     with connection.cursor() as cursor:
@@ -24,47 +21,31 @@ def reset_sequence(table_name):
         """)
 
 # Custom admin classes with sequence resetting after deletion
-class MainCourseAdmin(admin.ModelAdmin):
+class BaseAdmin(admin.ModelAdmin):
+    """Base admin class with automatic sequence resetting after deletion."""
+    def delete_queryset(self, request, queryset):
+        super().delete_queryset(request, queryset)
+        reset_sequence(self.model._meta.db_table)
+
+@admin.register(MainCourse)
+class MainCourseAdmin(BaseAdmin):
     list_display = ('id', 'name', 'description', 'thumbnail')
 
-    def delete_queryset(self, request, queryset):
-        super().delete_queryset(request, queryset)
-        reset_sequence(MainCourse._meta.db_table)
-
-admin.site.register(MainCourse, MainCourseAdmin)
-
-class CourseAdmin(admin.ModelAdmin):
+@admin.register(Course)
+class CourseAdmin(BaseAdmin):
     list_display = ('id', 'courses', 'description', 'video', 'thumbnail', 'main_course')
 
-    def delete_queryset(self, request, queryset):
-        super().delete_queryset(request, queryset)
-        reset_sequence(Course._meta.db_table)
-
-admin.site.register(Course, CourseAdmin)
-
-class ProfileAdmin(admin.ModelAdmin):
+@admin.register(Profile)
+class ProfileAdmin(BaseAdmin):
     list_display = ('id', 'user', 'phone_number')
 
-    def delete_queryset(self, request, queryset):
-        super().delete_queryset(request, queryset)
-        reset_sequence(Profile._meta.db_table)
-
-admin.site.register(Profile, ProfileAdmin)
-
-class ChatMessageAdmin(admin.ModelAdmin):
+@admin.register(ChatMessage)
+class ChatMessageAdmin(BaseAdmin):
     list_display = ('id', 'user', 'message', 'timestamp', 'reply_to')
 
-    def delete_queryset(self, request, queryset):
-        super().delete_queryset(request, queryset)
-        reset_sequence(ChatMessage._meta.db_table)
-
-admin.site.register(ChatMessage, ChatMessageAdmin)
-
-class ReplyAdmin(admin.ModelAdmin):
+@admin.register(Reply)
+class ReplyAdmin(BaseAdmin):
     list_display = ('id', 'message', 'reply_text', 'user', 'timestamp')
 
-    def delete_queryset(self, request, queryset):
-        super().delete_queryset(request, queryset)
-        reset_sequence(Reply._meta.db_table)
-
-admin.site.register(Reply, ReplyAdmin)
+# Register models without custom admin logic
+admin.site.register(CourseRequest)
