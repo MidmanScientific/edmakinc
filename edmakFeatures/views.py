@@ -464,4 +464,4 @@ from django.shortcuts import redirect
 # Logout view
 def logout_view(request):
     logout(request)
-    return redirect('login')  # Redirect to the login page after logout
+    return redirect('homepage')  # Redirect to the login page after logout
