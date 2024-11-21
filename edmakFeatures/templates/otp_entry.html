@@ -173,37 +173,36 @@
     </style>
 </head>
 <body>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-    <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="#">
-            <img src="{% static 'edmak2-removebg.png' %}" alt="Edmak Inc." class="logo">
-            <h4 class="ms-0.4"><span>Edmak Inc.</span></h4>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto gap-4">
-                {% if user.is_authenticated %}
-                <li class="nav-item"><a class="btn ms-2 btn-danger text-white" href="{% url 'logout' %}">Logout</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'chat' %}">Community</a></li>
-                <li class="nav-item"><a class="nav-link" href="#about-programs">About Us</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
-                <li class="nav-item"><a class="btn ms-2" href="{% url 'register' %}">Enroll Now</a></li>
-
-                {% else %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'chat' %}">Community</a></li>
-                <li class="nav-item"><a class="nav-link" href="#about-programs">About Us</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
-                <li class="nav-item"><a class="btn" href="{% url 'login' %}">Login</a></li>
-                <li class="nav-item"><a class="btn ms-2" href="{% url 'register' %}">Enroll Now</a></li>
-                
-                {% endif %}
-            </ul>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="{% static 'edmak2-removebg.png' %}" alt="Edmak Inc." class="logo">
+                <h4 class="ms-2"><span>Edmak Inc.</span></h4>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto gap-4">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="btn ms-2 btn-danger text-white" href="{% url 'logout' %}">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'chat' %}">Community</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about-programs">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                    <li class="nav-item"><a class="btn ms-2" href="{% url 'register' %}">Enroll Now</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'chat' %}">Community</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about-programs">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                    <li class="nav-item"><a class="btn" href="{% url 'login' %}">Login</a></li>
+                    <li class="nav-item"><a class="btn ms-2" href="{% url 'register' %}">Enroll Now</a></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+
 
 <!-- Background shapes -->
 <div class="background-shape shape1"></div>
@@ -238,5 +237,6 @@
 <!-- Bootstrap 5 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
