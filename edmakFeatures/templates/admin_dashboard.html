@@ -460,6 +460,53 @@ span{
     </div>
 </div>
 
+
+<!-- Add Assignment Modal -->
+<div class="modal fade" id="addAssignmentModal" tabindex="-1" aria-labelledby="addAssignmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="addAssignmentForm" method="post">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addAssignmentModalLabel">Add Assignment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Select Course -->
+                    <div class="mb-3">
+                        <label for="assignmentCourse" class="form-label">Select Course</label>
+                        <select class="form-select" id="assignmentCourse" name="course_id" required>
+                            {% for course in courses %}
+                            <option value="{{ course.id }}">{{ course.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- Assignment Question -->
+                    <div class="mb-3">
+                        <label for="assignmentQuestion" class="form-label">Question</label>
+                        <textarea class="form-control" id="assignmentQuestion" name="question" required></textarea>
+                    </div>
+                    <!-- Assignment Options -->
+                    <div class="mb-3">
+                        <label for="assignmentOptions" class="form-label">Options (comma-separated)</label>
+                        <input type="text" class="form-control" id="assignmentOptions" name="options" required>
+                    </div>
+                    <!-- Correct Answer -->
+                    <div class="mb-3">
+                        <label for="assignmentCorrectAnswer" class="form-label">Correct Answer</label>
+                        <input type="text" class="form-control" id="assignmentCorrectAnswer" name="correct_answer" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Add Assignment</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
 <script>
     document.getElementById("toggleUploadFormButton").onclick = function() {
         var form = document.getElementById("uploadCourseForm");
@@ -471,7 +518,29 @@ span{
         form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
     };
 </script>
+<script>
+document.getElementById('addAssignmentForm').addEventListener('submit', function (e) {
+    e.preventDefault();
 
+    const formData = new FormData(this);
+    fetch('/add-assignment/', {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(`Error: ${data.error}`);
+            } else {
+                alert(data.message);
+                location.reload(); // Reload to update the assignments list
+            }
+        })
+        .catch(error => console.error('Error:', error));
+});
+
+
+</script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>

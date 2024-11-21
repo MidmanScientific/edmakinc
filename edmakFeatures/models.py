@@ -90,4 +90,32 @@ class Reply(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
+from django.db import models
+
+class Assignment(models.Model):
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='assignments', null=True, blank=True)
+    question = models.TextField()
+    options = models.JSONField()  # Stores options as a list
+    correct_answer = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.question
+
+from django.db import models
+from django.contrib.auth.models import User
+from .models import Assignment
+
+class UserAssignmentCompletion(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+    is_completed = models.BooleanField(default=False)
+    completed_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.assignment.course.title} - Completed: {self.is_completed}"
+
+
+
+
+
 
