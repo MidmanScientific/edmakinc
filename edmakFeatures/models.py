@@ -50,7 +50,7 @@ class CourseRequest(models.Model):
         Checks if the OTP is still valid (within 7 days).
         """
         if self.otp_created_at:
-            return timezone.now() < self.otp_created_at + timedelta(days=30) and not self.otp_expired
+            return timezone.now() < self.otp_created_at + timedelta(days=7) and not self.otp_expired
         return False  # No OTP set
 
     def expire_otp(self):
