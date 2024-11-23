@@ -33,6 +33,7 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
 # Application definition
 
 INSTALLED_APPS = [
+    'django_daisy',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
