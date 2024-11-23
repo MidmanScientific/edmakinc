@@ -27,12 +27,10 @@ urlpatterns = [
     path('add-main-course/', views.add_main_course, name='add_main_course'),
     path('edit-main-course/<int:main_course_id>/', views.edit_main_course, name='edit_main_course'),
     path('delete-main-course/<int:main_course_id>/', views.delete_main_course, name='delete_main_course'),
-    path('add-assignment/', views.add_assignment, name='add-assignment'),
-    path('courses/<int:course_id>/submit-assignment/', views.submit_assignment, name='submit_assignment'),
     path('logout/', views.logout_view, name='logout'),
 
 ]
-
+ 
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

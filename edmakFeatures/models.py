@@ -50,7 +50,7 @@ class CourseRequest(models.Model):
         Checks if the OTP is still valid (within 7 days).
         """
         if self.otp_created_at:
-            return timezone.now() < self.otp_created_at + timedelta(days=1) and not self.otp_expired
+            return timezone.now() < self.otp_created_at + timedelta(days=30) and not self.otp_expired
         return False  # No OTP set
 
     def expire_otp(self):
@@ -91,28 +91,42 @@ class Reply(models.Model):
 
 
 from django.db import models
-
-class Assignment(models.Model):
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='assignments', null=True, blank=True)
-    question = models.TextField()
-    options = models.JSONField()  # Stores options as a list
-    correct_answer = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.question
+from django.contrib.auth.models import User
 
 from django.db import models
-from django.contrib.auth.models import User
-from .models import Assignment
+from django.contrib.auth.models import User  # Adjust if using a custom user model
+
+class Assignment(models.Model):
+    video = models.OneToOneField('Course', on_delete=models.CASCADE, related_name='assignment',null=True,blank=True)
+    question = models.TextField()
+    options = models.JSONField()  # Store options as a JSON object
+    correct_answer = models.JSONField()  # Store correct answer(s) as a JSON object
+    created_at = models.DateTimeField(auto_now_add=True, null=True,blank=True)
+
+    def __str__(self):
+        return f"Assignment for {self.video.courses}"
+
 
 class UserAssignmentCompletion(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
     is_completed = models.BooleanField(default=False)
-    completed_at = models.DateTimeField(null=True, blank=True)
+    submitted_at = models.DateTimeField(auto_now=True,null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.assignment.course.title} - Completed: {self.is_completed}"
+        return f"{self.user.username} - {self.assignment.video.title} - {'Completed' if self.is_completed else 'Not Completed'}"
+
+
+
+class CourseProgress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="progress")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="user_progress")
+    video = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="watched_videos")
+    is_completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.course.title} Progress"
+
 
 
 

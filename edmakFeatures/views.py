@@ -150,10 +150,6 @@ from .models import Course
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Course, Assignment, User, UserAssignmentCompletion
-
 @login_required
 def course_detail(request, course_id):
     # Fetch the selected course by ID
@@ -166,53 +162,11 @@ def course_detail(request, course_id):
     # Retrieve only courses under the main course of the selected course
     courses_under_main = Course.objects.filter(main_course=course.main_course)
 
-    # Check if assignments exist for the selected course
-    assignments = Assignment.objects.filter(course=course)
-
-    # Check if the user has completed the assignment for this course (if assignments exist)
-    user = request.user
-    user_has_completed_assignment = False
-
-    if assignments.exists():
-        # Check if the user has completed the assignment for this course
-        user_assignment_completion = UserAssignmentCompletion.objects.filter(user=user, assignment__course=course).first()
-
-        if user_assignment_completion and user_assignment_completion.is_completed:
-            user_has_completed_assignment = True
-
-    # Render the course_detail template with the necessary context
+    # Render the course_detail template with courses under the selected main course
     return render(request, 'course_detail.html', {
-        'course': course,
         'main_course': course.main_course,
-        'courses': courses_under_main,
-        'assignments': assignments,
-        'user_has_completed_assignment': user_has_completed_assignment
+        'courses': courses_under_main
     })
-
-
-from django.shortcuts import redirect, get_object_or_404
-from django.http import JsonResponse
-from .models import Assignment, UserAssignmentCompletion
-
-@login_required
-def submit_assignment(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
-    assignment = Assignment.objects.filter(course=course).first()  # Assuming only one assignment per course
-
-    if not assignment:
-        return JsonResponse({'error': 'No assignment found for this course'}, status=400)
-
-    user_answer = request.POST.get('answer')
-    if not user_answer:
-        return JsonResponse({'error': 'Please select an answer'}, status=400)
-
-    # Check if the user's answer matches the correct answer
-    if user_answer == assignment.correct_answer:
-        # Mark the assignment as completed
-        UserAssignmentCompletion.objects.create(user=request.user, assignment=assignment, is_completed=True)
-        return JsonResponse({'message': 'Congratulations! You completed the assignment successfully.'}, status=200)
-    else:
-        return JsonResponse({'error': 'Incorrect answer, please try again.'}, status=400)
 
 
 
@@ -511,33 +465,3 @@ from django.shortcuts import redirect
 def logout_view(request):
     logout(request)
     return redirect('homepage')  # Redirect to the login page after logout
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from edmakFeatures.models import Course, Assignment
-
-@csrf_exempt
-def add_assignment(request):
-    if request.method == "POST":
-        course_id = request.POST.get('course_id')
-        question = request.POST.get('question')
-        options = request.POST.get('options')
-        correct_answer = request.POST.get('correct_answer')
-
-        # Validate input
-        if not (course_id and question and options and correct_answer):
-            return JsonResponse({'error': 'All fields are required'}, status=400)
-
-        course = get_object_or_404(Course, id=course_id)
-
-        # Create assignment
-        assignment = Assignment.objects.create(
-            course=course,
-            question=question,
-            options=options.split(","),
-            correct_answer=correct_answer
-        )
-        return JsonResponse({'message': 'Assignment added successfully!'}, status=200)
-    return JsonResponse({'error': 'Invalid request method'}, status=405)

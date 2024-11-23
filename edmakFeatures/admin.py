@@ -7,6 +7,8 @@ from .models import (
     CourseRequest,
     ChatMessage,
     Reply,
+    Assignment,
+    UserAssignmentCompletion,
 )
 
 # Function to reset sequence for a given table
@@ -31,9 +33,20 @@ class BaseAdmin(admin.ModelAdmin):
 class MainCourseAdmin(BaseAdmin):
     list_display = ('id', 'name', 'description', 'thumbnail')
 
+# Define Assignment Inline for Course
+class AssignmentInline(admin.StackedInline):
+    model = Assignment
+    extra = 0  # No extra empty forms
+    min_num = 0  # Allow zero assignments
+    fields = ('question', 'options', 'correct_answer')
+    verbose_name = 'Assignment'
+    verbose_name_plural = 'Assignments'
+
+# Updated CourseAdmin with AssignmentInline
 @admin.register(Course)
 class CourseAdmin(BaseAdmin):
     list_display = ('id', 'courses', 'description', 'video', 'thumbnail', 'main_course')
+    inlines = [AssignmentInline]
 
 @admin.register(Profile)
 class ProfileAdmin(BaseAdmin):
@@ -49,3 +62,36 @@ class ReplyAdmin(BaseAdmin):
 
 # Register models without custom admin logic
 admin.site.register(CourseRequest)
+
+# Separate admin for Assignment and UserAssignmentCompletion
+from django.contrib import admin
+from django.db import models
+from django.forms import Textarea
+from .models import Assignment
+
+@admin.register(Assignment)
+class AssignmentAdmin(admin.ModelAdmin):
+    # Display fields in the admin interface
+    list_display = ('video', 'created_at')
+    search_fields = ('video__title',)
+    list_filter = ('created_at',)
+    readonly_fields = ('created_at',)
+    
+    # Organizing fields in the detail view
+    fieldsets = (
+        (None, {
+            'fields': ('video', 'question', 'options', 'correct_answer')
+        }),
+    )
+    
+    # Customizing the input widget for JSON fields
+    formfield_overrides = {
+        models.JSONField: {'widget': Textarea(attrs={'rows': 5, 'cols': 50})},  # Larger input box
+    }
+
+@admin.register(UserAssignmentCompletion)
+class UserAssignmentCompletionAdmin(admin.ModelAdmin):
+    list_display = ('user', 'assignment', 'is_completed', 'submitted_at')
+    search_fields = ('user__username', 'assignment__video__title')
+    list_filter = ('is_completed', 'submitted_at')
+
