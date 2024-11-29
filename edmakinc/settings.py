@@ -140,6 +140,12 @@ import os
 MEDIA_URL = '/media/'  # URL to serve media files
 MEDIA_ROOT = '/var/media'  # Matches Render's disk mount path
 
+if DEBUG:
+    STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR,'static')
+MEDIA_ROOT = [os.path.join(BASE_DIR,'static')]
+
   # Updated to match Render's mount path
 SESSION_COOKIE_AGE = 60 *15
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
