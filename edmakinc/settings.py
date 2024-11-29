@@ -32,15 +32,14 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
 
 # Application definition
 
-INSTALLED_APPS = [
-    'django_daisy',
+INSTALLED_APPS = [ 
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'edmakFeatures.apps.EdmakfeaturesConfig'
+    'edmakFeatures.apps.EdmakfeaturesConfig',
 ]
 
 MIDDLEWARE = [
