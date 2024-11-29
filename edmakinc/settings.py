@@ -137,14 +137,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 import os
 
-MEDIA_URL = '/media/'  # The URL where media files will be accessible
+MEDIA_URL = '/media/'  # URL prefix for accessing media files
 
 if DEBUG:  # Local development
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 else:  # Production on Render
-    MEDIA_ROOT = '/var/www/media'  # Use the persistent disk mount path
-
-
+    MEDIA_ROOT = '/var/media'  # Updated to match Render's mount path
 SESSION_COOKIE_AGE = 60 *15
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
