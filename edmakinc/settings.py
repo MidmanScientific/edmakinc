@@ -135,9 +135,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-STATIC_URL = '/static/'
 
-MEDIA_URL = '/media/'
 
 if DEBUG:
 
