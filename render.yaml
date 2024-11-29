@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: edmakinc
+    env: python
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+    startCommand: "gunicorn edmakinc.wsgi:application"
+    disk:
+      - name: media
+        mountPath: /var/media
+    routes:
+      - type: static
+        name: media
+        path: /media/*
+        localPath: /var/media
+      - type: rewrite
+        source: /*
+        destination: /
