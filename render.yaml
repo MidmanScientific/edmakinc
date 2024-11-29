@@ -1,15 +1,9 @@
 services:
-  - type: web
-    name: edmakinc
+  - name: edmakinc
+    type: web
     env: python
-    plan: starter
     buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
-    startCommand: "gunicorn edmakinc.wsgi:application"
+    startCommand: "gunicorn edmakinc.wsgi:application --bind 0.0.0.0:8000"
     disk:
-      - name: media-disk  # You can give any name, as Render uses it internally for configuration.
+      - name: media-disk
         mountPath: /var/media
-    envVars:
-      - key: DEBUG
-        value: false
-      - key: ALLOWED_HOSTS
-        value: edmakinc.onrender.com
