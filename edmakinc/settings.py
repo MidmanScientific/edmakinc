@@ -135,8 +135,14 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+import os
+
+MEDIA_URL = '/media/'  # The URL where media files will be accessible
+
+if DEBUG:  # Local development
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+else:  # Production on Render
+    MEDIA_ROOT = '/var/www/media'  # Use the persistent disk mount path
 
 
 SESSION_COOKIE_AGE = 60 *15
