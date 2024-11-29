@@ -139,7 +139,6 @@ import os
 
 MEDIA_URL = '/media/'  # URL to serve media files
 MEDIA_ROOT = '/var/media'  # Matches Render's disk mount path
-WHITENOISE_STATIC_PREFIX = MEDIA_URL
 
   # Updated to match Render's mount path
 SESSION_COOKIE_AGE = 60 *15
