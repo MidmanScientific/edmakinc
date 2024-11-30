@@ -139,6 +139,7 @@ import os
 
 MEDIA_URL = '/media/'  # URL to serve media files
 MEDIA_ROOT = '/var/media'  # Matches Render's disk mount path
+WHITENOISE_ROOT = MEDIA_ROOT 
 
 
   # Updated to match Render's mount path
