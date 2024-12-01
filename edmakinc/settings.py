@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'edmakFeatures.apps.EdmakfeaturesConfig',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -137,8 +138,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 import os
 
-MEDIA_URL = '/media/'  # URL to serve media files
-MEDIA_ROOT = '/var/media'  # Matches Render's disk mount path
+#MEDIA_URL = '/media/'  # URL to serve media files
+# MEDIA_ROOT = '/var/media'  # Matches Render's disk mount path
 
 
   # Updated to match Render's mount path
@@ -146,3 +147,24 @@ SESSION_COOKIE_AGE = 60 *15
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 LOGIN_URL = 'login'  
+
+
+from decouple import Config, Csv
+
+# Initialize the Config object to read from the .env file
+config = Config()
+
+# AWS S3 settings using environment variables
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_SIGNATURE_NAME = config('AWS_S3_SIGNATURE_NAME')
+AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME')
+AWS_S3_FILE_OVERWRITE = config('AWS_S3_FILE_OVERWRITE', cast=bool)
+AWS_DEFAULT_ACL = config('AWS_DEFAULT_ACL', default=None)
+AWS_S3_VERIFY = config('AWS_S3_VERIFY', cast=bool)
+AWS_QUERYSTRING_AUTH = config('AWS_QUERYSTRING_AUTH', cast=bool)
+DEFAULT_FILE_STORAGE = config('DEFAULT_FILE_STORAGE')
+
+
+MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/'
