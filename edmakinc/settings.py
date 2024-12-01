@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'edmakFeatures.apps.EdmakfeaturesConfig',
+    'storages'
     
 ]
 
@@ -149,17 +150,10 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 LOGIN_URL = 'login'  
 
 # AWS S3 settings using environment variables
-AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_SIGNATURE_NAME = config('AWS_S3_SIGNATURE_NAME')
-AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME')
-AWS_S3_FILE_OVERWRITE = config('AWS_S3_FILE_OVERWRITE', cast=bool)
-AWS_DEFAULT_ACL = config('AWS_DEFAULT_ACL')
-AWS_S3_VERIFY = config('AWS_S3_VERIFY', cast=bool)
-AWS_QUERYSTRING_AUTH = config('AWS_QUERYSTRING_AUTH', cast=bool)
-DEFAULT_FILE_STORAGE = config('DEFAULT_FILE_STORAGE')
-
-
-MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.us-east-1.amazonaws.com/'
+DEFAULT_FILE_STORAGE ="storages.backends.s3.S3Storage"
+AWS_ACCESS_KEY_ID=config("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY=config("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME=config("AWS_STORAGE_BUCKET_NAME")
+AWS_QUERYSTRING_AUTH=config("AWS_QUERYSTRING_AUTH",cast=bool)
+AWS_S3_FILE_OVERWRITE=config("AWS_S3_FILE_OVERWRITE",cast=bool)
 
