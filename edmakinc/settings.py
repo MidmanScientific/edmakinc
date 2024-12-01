@@ -161,4 +161,5 @@ AWS_QUERYSTRING_AUTH = config('AWS_QUERYSTRING_AUTH', cast=bool)
 DEFAULT_FILE_STORAGE = config('DEFAULT_FILE_STORAGE')
 
 
-MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/'
+MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.us-east-1.amazonaws.com/'
+
