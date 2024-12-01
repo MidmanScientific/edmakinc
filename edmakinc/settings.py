@@ -148,12 +148,6 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 LOGIN_URL = 'login'  
 
-
-from decouple import Config, Csv
-
-# Initialize the Config object to read from the .env file
-config = Config()
-
 # AWS S3 settings using environment variables
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
