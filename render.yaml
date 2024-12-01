@@ -1,9 +1,0 @@
-services:
-  - name: edmakinc
-    type: web
-    env: python
-    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
-    startCommand: "gunicorn edmakinc.wsgi:application --bind 0.0.0.0:8000"
-    disk:
-      - name: media-disk
-        mountPath: /var/media
