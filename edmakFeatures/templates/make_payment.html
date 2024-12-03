@@ -1,0 +1,8 @@
+<div class="container">
+    <h1>Make Payment for {{ course.name }}</h1>
+    <p>Price: ₦{{ price }}</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Proceed to Payment</button>
+    </form>
+</div>

@@ -135,21 +135,15 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
 import os
 
-#MEDIA_URL = '/media/'  # URL to serve media files
-# MEDIA_ROOT = '/var/media'  # Matches Render's disk mount path
-
-
-  # Updated to match Render's mount path
+#MEDIA_URL = '/media/'  
+# MEDIA_ROOT = '/var/media'  
 SESSION_COOKIE_AGE = 60 *40
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
 LOGIN_URL = 'login'  
 
-# AWS S3 settings using environment variables
+
 DEFAULT_FILE_STORAGE ="storages.backends.s3.S3Storage"
 AWS_ACCESS_KEY_ID=config("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY=config("AWS_SECRET_ACCESS_KEY")
@@ -158,4 +152,6 @@ AWS_QUERYSTRING_AUTH=config("AWS_QUERYSTRING_AUTH",cast=bool)
 AWS_S3_FILE_OVERWRITE=config("AWS_S3_FILE_OVERWRITE",cast=bool)
 AWS_S3_REGION_NAME=config("AWS_S3_REGION_NAME")
 AWS_QUERYSTRING_EXPIRE = config('AWS_QUERYSTRING_EXPIRE', cast=int) 
+PAYSTACK_SECRET_KEY=config("PAYSTACK_SECRET_KEY")
+PAYSTACK_PUBLIC_KEY=config("PAYSTACK_PUBLIC_KEY")
 

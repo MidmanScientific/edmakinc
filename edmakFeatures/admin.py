@@ -9,6 +9,7 @@ from .models import (
     Reply,
     Assignment,
     UserAssignmentCompletion,
+    Prices
 )
 
 # Function to reset sequence for a given table
@@ -51,6 +52,11 @@ class CourseAdmin(BaseAdmin):
 @admin.register(Profile)
 class ProfileAdmin(BaseAdmin):
     list_display = ('id', 'user', 'phone_number')
+
+@admin.register(Prices)
+class PricesAdmin(admin.ModelAdmin):
+    list_display = ('main_course', 'price')
+    search_fields = ('main_course__name',)
 
 @admin.register(ChatMessage)
 class ChatMessageAdmin(BaseAdmin):

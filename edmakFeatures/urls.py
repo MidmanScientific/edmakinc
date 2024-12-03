@@ -31,6 +31,8 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('get-course-content/<str:file_key>/', views.get_course_content, name='get_course_content'),
     path('get-main-course-content/<int:main_course_id>/', views.get_main_course_content, name='get_main_course_content'),
+    path('make-payment/<int:course_id>/', views.make_payment, name='make_payment'),
+    path('payment/success/', views.payment_success, name='payment_success'),
 
 ]
  
