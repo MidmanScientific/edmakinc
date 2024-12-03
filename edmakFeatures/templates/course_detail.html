@@ -236,36 +236,31 @@ body {
 </nav>
 
 
-    <div class="container">
-        <div class="row">
-            {% for course in courses %}
-            <div class="col-md-4">
-                <div class="course-container">
-                    <div class="course-media">
-                        <!-- Video Player with Download Disabled -->
-                        <video id="courseVideo{{ forloop.counter }}" class="course-video" controls controlslist="nodownload">
-                            <source src="{{ course.video.url }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-    
-                        <!-- Overlay Thumbnail -->
-                        <div id="thumbnailOverlay{{ forloop.counter }}" 
-                             class="video-thumbnail-overlay" 
-                             style="background-image: url('{{ course.thumbnail.url }}');"></div>
-                    </div>
-                    <h2 class="course-title">{{ course.courses }}</h2>
-                    <p class="course-description">{{ course.description }}</p>
-                    {% if otp_verified %}
-                    <div class="alert alert-warning">
-                        You need to verify your OTP to access the course details.
-                        <a href="{% url 'otp_entry' %}" class="alert-link">Click here to verify</a>.
-                    </div>
-                    {% endif %}
+<div class="container">
+    <div class="row">
+        {% for course in courses %}
+        <div class="col-md-4">
+            <div class="course-container">
+                <div class="course-media">
+                    <!-- Video Player with Pre-signed URL -->
+                    <video id="courseVideo{{ forloop.counter }}" class="course-video" controls controlslist="nodownload">
+                        <source src="{{ course.video_url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+
+                    <!-- Overlay Thumbnail with Pre-signed URL -->
+                    <div id="thumbnailOverlay{{ forloop.counter }}" 
+                         class="video-thumbnail-overlay" 
+                         style="background-image: url('{{ course.thumbnail_url }}');"></div>
                 </div>
+                <h2 class="course-title">{{ course.name }}</h2>
+                <p class="course-description">{{ course.description }}</p>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
+</div>
+
     
     <div id="timerWarning" class="timer-warning">
         Inactivity detected. Move your mouse or press any key to stay active!
@@ -275,7 +270,7 @@ body {
 <script>
     // Variables for inactivity and warning timeouts
     let inactivityTimeout, warningTimeout;
-    const inactiveFor4Minutes = 20 * 60 * 1000; // 4 minutes in milliseconds
+    const inactiveFor4Minutes = 15 * 60 * 1000; // 4 minutes in milliseconds
     const warningFor30Seconds = inactiveFor4Minutes - 30000; // Show warning 30 seconds before timeout
 
     // Function to freeze the screen by disabling user interactions

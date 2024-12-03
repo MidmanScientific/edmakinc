@@ -45,10 +45,28 @@ def register(request):
 
 from django.shortcuts import render
 from .models import MainCourse
+from .models import MainCourse
+from .utils import generate_presigned_url
+
 @login_required
 def courses(request):
     main_courses = MainCourse.objects.all()
-    return render(request, 'courses.html', {'main_courses': main_courses})
+    courses_with_presigned_urls = []
+
+    for main_course in main_courses:
+        # Generate pre-signed URL for the thumbnail
+        thumbnail_key = main_course.thumbnail.name  # Path in S3: 'main_courses/thumbnails/filename.jpg'
+        presigned_url = generate_presigned_url(thumbnail_key)
+
+        courses_with_presigned_urls.append({
+            "id": main_course.id,
+            "name": main_course.name,
+            "description": main_course.description,
+            "thumbnail_url": presigned_url,
+        })
+
+    return render(request, 'courses.html', {'main_courses': courses_with_presigned_urls})
+
 
 
 @login_required
@@ -150,6 +168,10 @@ from .models import Course
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 
+
+from .models import Course
+from .utils import generate_presigned_url
+
 @login_required
 def course_detail(request, course_id):
     # Fetch the selected course by ID
@@ -159,13 +181,29 @@ def course_detail(request, course_id):
     if not request.session.get('otp_verified'):
         return redirect(f'/otp-entry/?next=/courses/{course_id}/')
 
-    # Retrieve only courses under the main course of the selected course
+    # Retrieve courses under the main course
     courses_under_main = Course.objects.filter(main_course=course.main_course)
+    courses_with_presigned_urls = []
 
-    # Render the course_detail template with courses under the selected main course
+    for course in courses_under_main:
+        # Generate pre-signed URLs for thumbnail and video
+        thumbnail_key = course.thumbnail.name  # Path in S3: 'thumbnails/filename.jpg'
+        video_key = course.video.name  # Path in S3: 'videos/filename.mp4'
+
+        thumbnail_url = generate_presigned_url(thumbnail_key)
+        video_url = generate_presigned_url(video_key)
+
+        courses_with_presigned_urls.append({
+            "id": course.id,
+            "name": course.courses,
+            "description": course.description,
+            "thumbnail_url": thumbnail_url,
+            "video_url": video_url,
+        })
+
     return render(request, 'course_detail.html', {
         'main_course': course.main_course,
-        'courses': courses_under_main
+        'courses': courses_with_presigned_urls
     })
 
 
@@ -465,3 +503,59 @@ from django.shortcuts import redirect
 def logout_view(request):
     logout(request)
     return redirect('homepage')  # Redirect to the login page after logout
+
+
+
+from django.http import JsonResponse
+from .utils import generate_presigned_url  # Import the function
+
+def get_course_content(request, file_key):
+    """
+    Serve course content using a pre-signed URL.
+    """
+    if request.user.is_authenticated:  # Ensure the user is logged in
+        presigned_url = generate_presigned_url(file_key)
+        if presigned_url:
+            return JsonResponse({"url": presigned_url})
+        else:
+            return JsonResponse({"error": "Could not generate URL"}, status=500)
+    return JsonResponse({"error": "Unauthorized"}, status=401)
+
+
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import MainCourse
+from .utils import generate_presigned_url
+from .utils import AWS_STORAGE_BUCKET_NAME
+from urllib.parse import urlparse
+
+def get_main_course_content(request, main_course_id):
+    """
+    Serve main course content using a pre-signed URL.
+    """
+    if request.user.is_authenticated:  # Ensure the user is logged in
+        try:
+            # Fetch the MainCourse object
+            main_course = get_object_or_404(MainCourse, id=main_course_id)
+
+            # Full URL of the thumbnail
+            file_url = main_course.thumbnail.url  
+            # Parse the URL to extract the object key
+            parsed_url = urlparse(file_url)
+            file_key = parsed_url.path.lstrip("/")  # Remove leading slash
+
+            # Generate the pre-signed URL
+            presigned_url = generate_presigned_url(file_key)
+
+            if presigned_url:
+                return JsonResponse({"url": presigned_url})
+            else:
+                return JsonResponse({"error": "Could not generate URL"}, status=500)
+
+        except Exception as e:
+            # Log the error for debugging
+            print(f"Error generating pre-signed URL: {e}")
+            return JsonResponse({"error": "Server error"}, status=500)
+    return JsonResponse({"error": "Unauthorized"}, status=401)
+
+

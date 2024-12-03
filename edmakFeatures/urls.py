@@ -29,6 +29,8 @@ urlpatterns = [
     path('edit-main-course/<int:main_course_id>/', views.edit_main_course, name='edit_main_course'),
     path('delete-main-course/<int:main_course_id>/', views.delete_main_course, name='delete_main_course'),
     path('logout/', views.logout_view, name='logout'),
+    path('get-course-content/<str:file_key>/', views.get_course_content, name='get_course_content'),
+    path('get-main-course-content/<int:main_course_id>/', views.get_main_course_content, name='get_main_course_content'),
 
 ]
  
