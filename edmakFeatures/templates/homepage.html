@@ -34,7 +34,6 @@
             <ul class="navbar-nav ms-auto gap-4">
                 {% if user.is_authenticated %}
                 
-                
                 <li class="nav-item"><a class="btn ms-2 btn-danger text-white" href="{% url 'logout' %}">Logout</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'chat' %}">Community</a></li>
                 <li class="nav-item"><a class="nav-link" href="#about-programs">About Us</a></li>
@@ -42,7 +41,6 @@
                 <li class="nav-item"><a class="btn ms-2" href="{% url 'register' %}">Enroll Now</a></li>
 
                 {% else %}
-            
                 <li class="nav-item"><a class="nav-link" href="{% url 'chat' %}">Community</a></li>
                 <li class="nav-item"><a class="nav-link" href="#about-programs">About Us</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
@@ -67,6 +65,8 @@
           </p>
           <p class="text-muted"><em>Ready to Begin an Exciting Journey?</em></p>
           <a href="{%  url 'register' %}" class="btn btn-lg mt-3">Enroll Now</a>
+        </div>
+
         <!-- Animated Image -->
         <div class="col-md-6 text-center">
           <img src="{% static 'IMG-20241105-WA0008-removebg-preview.png' %}" alt="Student" class="hero-image">
