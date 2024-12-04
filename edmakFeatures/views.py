@@ -567,44 +567,7 @@ from django.http import JsonResponse
 from .models import MainCourse, Prices, CourseRequest
 from decimal import Decimal
 
-def make_payment(request, course_id):
-    main_course = get_object_or_404(MainCourse, id=course_id)
-    price_obj = get_object_or_404(Prices, main_course=main_course)
-
-    # Paystack API Keys
-    paystack_secret_key = settings.PAYSTACK_SECRET_KEY
-    paystack_public_key = settings.PAYSTACK_PUBLIC_KEY
-
-    if request.method == "POST":
-        user = request.user
-        email = user.email
-        amount = int(price_obj.price * Decimal(100))  # Paystack expects amount in kobo
-
-        # Initialize Paystack transaction
-        url = 'https://api.paystack.co/transaction/initialize'
-        headers = {
-            "Authorization": f"Bearer {paystack_secret_key}"
-        }
-        data = {
-            "email": email,
-            "amount": amount,
-            "callback_url": request.build_absolute_uri('/payment/success/'),
-        }
-        response = requests.post(url, headers=headers, json=data)
-        res_data = response.json()
-
-        if res_data.get('status'):
-            authorization_url = res_data['data']['authorization_url']
-            return redirect(authorization_url)
-        else:
-            return JsonResponse({"error": "Error initializing payment"})
-
-    return render(request, 'make_payment.html', {
-        'course': main_course,
-        'price': price_obj.price,
-        'paystack_public_key': paystack_public_key
-    })
 
 
-def payment_success(request):
-    return render(request, 'payment_success.html')
+
+
