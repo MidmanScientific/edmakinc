@@ -14,8 +14,14 @@ import random
 # Function to generate a 6-digit OTP
 
 
+from django.shortcuts import render
+from .models import MainCourse
+
 def homepage(request):
-    return render(request, 'homepage.html')
+    # Fetch all main courses
+    courses = MainCourse.objects.all()
+    return render(request, 'homepage.html', {'courses': courses})
+
 
 def register(request):
     if request.method == 'POST':
@@ -568,6 +574,71 @@ from .models import MainCourse, Prices, CourseRequest
 from decimal import Decimal
 
 
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from django.conf import settings
+import requests
+
+from django.shortcuts import render, get_object_or_404
+from .models import MainCourse
+
+from django.shortcuts import render, get_object_or_404
+from .models import MainCourse
+
+def payment_page(request, course_id):
+    """
+    Render the payment page for a specific course.
+    """
+    course = get_object_or_404(MainCourse, id=course_id)
+    # Safely access price, check if 'course.price' exists and has a 'price' attribute
+    price = course.price.price if course.price and hasattr(course.price, 'price') else 0.00
+    return render(request, 'payment_page.html', {'course': course, 'price': price})
+
+
+
+import requests
+from django.http import JsonResponse
+from django.conf import settings
+from .models import CourseRequest  # Adjust if needed
+
+import requests
+from django.http import JsonResponse
+from django.conf import settings
+from .models import CourseRequest  # Assuming this model is being used for tracking course requests
+
+def verify_payment(request):
+    """
+    Verify Paystack payment after the user completes the payment.
+    """
+    transaction_ref = request.GET.get('reference')
+    if not transaction_ref:
+        return JsonResponse({'success': False, 'message': 'Transaction reference is missing.'})
+
+    # Set up headers for the Paystack API
+    headers = {
+        'Authorization': f'Bearer {settings.PAYSTACK_SECRET_KEY}',  # Ensure the Paystack secret key is set
+    }
+    url = f"https://api.paystack.co/transaction/verify/{transaction_ref}"
+
+    response = requests.get(url, headers=headers)
+    data = response.json()
+
+    if data['status'] == 'success' and data['data']['status'] == 'success':
+        # Payment was successful, process the payment
+        course_id = data['data']['metadata']['course_id']  # Retrieve the course ID from metadata
+        user = request.user
+
+        try:
+            # Mark the course request as approved
+            course_request = CourseRequest.objects.get(user=user, course_id=course_id)
+            course_request.approved = True
+            course_request.save()
+        except CourseRequest.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Course request not found.'})
+
+        return JsonResponse({'success': True, 'message': 'Payment verified successfully!'})
+    else:
+        return JsonResponse({'success': False, 'message': 'Payment verification failed!'})
 
 
 

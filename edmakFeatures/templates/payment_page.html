@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay for {{ course.name }}</title>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+</head>
+<body>
+    <h1>Pay for {{ course.name }}</h1>
+    <p>Price: GHS {{ price }}</p>
+    <button id="paystack-btn" data-course-id="{{ course.id }}" data-price="{{ price }}">
+        Make Payment
+    </button>
+
+    <script>
+        document.getElementById('paystack-btn').addEventListener('click', function () {
+            const courseId = this.getAttribute('data-course-id');
+            const price = this.getAttribute('data-price') * 100; // Convert price to kobo (assuming GHS is in kobo for the conversion)
+
+            const handler = PaystackPop.setup({
+                key: 'pk_live_1aa4274a7633c9c3517c093c917918eb044b6fa3',  // Use your Paystack public key
+                email: '{{ request.user.email }}',  // Use the logged-in user's email
+                amount: price,  // Amount in kobo (i.e., price * 100)
+                currency: 'GHS',  // Use the correct currency, e.g., Ghana Cedi (GHS)
+                metadata: {
+                    course_id: courseId,  // Pass course ID for backend processing
+                },
+                callback: function (response) {
+                    alert('Payment successful! Transaction reference: ' + response.reference);
+                    // Call the backend to verify the payment
+                    fetch(`/verify-payment/?reference=${response.reference}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('Payment verified successfully!');
+                                // Optionally, redirect to a success page or update UI
+                                window.location.href = '/success-page';  // Adjust this path to your success page
+                            } else {
+                                alert('Payment verification failed!');
+                            }
+                        })
+                        .catch((error) => {
+                            alert('Error verifying payment: ' + error.message);
+                        });
+                },
+                onClose: function () {
+                    alert('Payment process was cancelled.');
+                },
+            });
+
+            handler.openIframe();  // Open Paystack iframe for payment
+        });
+    </script>
+</body>
+</html>

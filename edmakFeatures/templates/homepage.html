@@ -72,7 +72,22 @@
           <img src="{% static 'IMG-20241105-WA0008-removebg-preview.png' %}" alt="Student" class="hero-image">
         </div>
       </div>
-
+      {% if user.is_authenticated %}
+      <div>
+        {% for course in courses %}
+            <div style="margin-bottom: 20px; border: 1px solid #ccc; padding: 10px;">
+                <h3>{{ course.name }}</h3>
+                <p>{{ course.description }}</p>
+                {% if course.price %}
+                    <p><strong>Price:</strong> ${{ course.price.price }}</p>
+                    <a href="{% url 'course_payment' course.id %}" class="btn btn-primary">Pay Now</a>
+                {% else %}
+                    <p><em>Price not available</em></p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
       <!-- Animated Icons -->
       <div class="icon-container">
         <div class="icon1 html-icon">HTML</div>

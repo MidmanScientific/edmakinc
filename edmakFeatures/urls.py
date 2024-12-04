@@ -8,7 +8,8 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.homepage, name='homepage'),
+    path('', views.homepage, name='homepage'),  # Homepage
+    path('payment/<int:course_id>/', views.payment_page, name='course_payment'),
     path('register', views.register, name='register'),
     path('login', views.user_login, name='login'),
     path('courses', views.courses, name='courses'),
@@ -31,7 +32,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('get-course-content/<str:file_key>/', views.get_course_content, name='get_course_content'),
     path('get-main-course-content/<int:main_course_id>/', views.get_main_course_content, name='get_main_course_content'),
-   
+    path('verify-payment/', views.verify_payment, name='verify_payment'), 
 
 ]
  
