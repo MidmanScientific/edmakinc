@@ -4,14 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pay for {{ course.name }}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://js.paystack.co/v1/inline.js"></script>
 </head>
 <body>
-    <h1>Pay for {{ course.name }}</h1>
-    <p>Price: GHS {{ price }}</p>
-    <button id="paystack-btn" data-course-id="{{ course.id }}" data-price="{{ price }}">
-        Make Payment
-    </button>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #f4f7fa, #e0e7ff);
+            background-size: cover;
+            background-repeat: no-repeat;
+            height: 100vh;
+            
+            align-items: center;
+           
+            overflow: hidden;
+        }
+        .payment-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            margin-top: 40%;
+        }
+        .payment-header {
+            font-size: 1.5rem;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .price-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #28a745;
+            margin-bottom: 30px;
+        }
+        .pay-button {
+            font-size: 1.1rem;
+            background-color: #001730e0;
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: none;
+            width: 100%;
+            max-width: 300px; /* Ensures button is responsive */
+            margin: 0 auto; /* Center the button */
+            transition: background-color 0.3s ease;
+        }
+        .pay-button:hover {
+            background-color: #0e2135a8;
+        }
+        .pay-button i {
+            margin-right: 10px;
+        }
+
+        .background-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .shape1 {
+            width: 400px;
+            height: 400px;
+            top: -100px;
+            left: -100px;
+            background: #1a73e8;
+        }
+
+        .shape2 {
+            width: 300px;
+            height: 300px;
+            bottom: 15%;
+            right: 10%;
+            background: #34a853;
+        }
+
+        .shape3 {
+            width: 250px;
+            height: 250px;
+            top: 50%;
+            left: 50%;
+            background: #ea4335;
+            transform: translate(-50%, -50%);
+        }
+
+
+        /* Media Query for Small Devices */
+        @media (max-width: 575px) {
+            .payment-header {
+                font-size: 1.35rem;;
+            }
+            .price-text {
+                font-size: 1.1rem;
+            }
+            .pay-button {
+                font-size: 1rem;
+                padding: 12px 20px;
+            }
+        }
+
+        /* Media Query for Larger Screens */
+        @media (min-width: 576px) and (max-width: 991px) {
+            .payment-header {
+                font-size: 1.45rem;
+            }
+            .price-text {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+
+<div class="background-shape shape1"></div>
+<div class="background-shape shape2"></div>
+<div class="background-shape shape3"></div>
+
+
+ <div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-12">
+            <div class="payment-container">
+                <h1 class="payment-header"><i class="fas fa-book-open"></i> Pay for {{ course.name }}</h1>
+                <p class="price-text">Price: GHS {{ price }}</p>
+                <button id="paystack-btn" class="pay-button" data-course-id="{{ course.id }}" data-price="{{ price }}">
+                    <i class="fas fa-credit-card"></i> Make Payment
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
     <script>
         document.getElementById('paystack-btn').addEventListener('click', function () {
@@ -52,5 +178,8 @@
             handler.openIframe();  // Open Paystack iframe for payment
         });
     </script>
-</body>
+  <!-- Bootstrap and FontAwesome JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </html>

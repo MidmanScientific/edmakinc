@@ -76,7 +76,7 @@
     background-color: #bef0ff;
     padding: 100px 20px;
     position: relative;
-    margin-top: 60px;
+    margin-top: 2px;
   }
   
   .hero-content {
@@ -105,7 +105,7 @@
   /* Continuous Pulse for Hero Image */
   .hero-image {
     width: 100%;
-    max-width: 600px;
+    max-width: 430px;
     animation: fadeInUp 3.5s ease forwards, continuousPulse 3.5s ease-in-out infinite;
   }
   
