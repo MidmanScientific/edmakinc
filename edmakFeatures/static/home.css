@@ -97,6 +97,7 @@
     color: #666;
     max-width: 600px;
     animation: fadeInUp 2s ease forwards; /* Fade-in for hero subtitle */
+    text-align:left;
   
   }
   
@@ -235,6 +236,9 @@
     .about-programs h2 {
         font-size: 1.5rem;
     }
+    .hero-subtitle {
+      text-align:left;
+    }
   
     .program-item {
         padding: 0.8rem;
@@ -267,6 +271,9 @@
   @media(max-width:288px){
     .icon1{
       font-size:0.2rem;
+    }
+    .hero-subtitle {
+      text-align:left;
     }
   }
   
