@@ -7,7 +7,7 @@ AWS_SECRET_ACCESS_KEY =config("AWS_SECRET_ACCESS_KEY")
 AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME")
 AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
 
-def generate_presigned_url(object_key, expiration=20):
+def generate_presigned_url(object_key, expiration=90):
     """
     Generate a pre-signed URL to access an S3 object.
     :param object_key: The S3 key for the file.

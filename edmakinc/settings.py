@@ -139,7 +139,7 @@ import os
 
 #MEDIA_URL = '/media/'  
 # MEDIA_ROOT = '/var/media'  
-SESSION_COOKIE_AGE = 60 *40
+SESSION_COOKIE_AGE = 60 *55
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 LOGIN_URL = 'login'  
 
