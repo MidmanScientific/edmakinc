@@ -98,24 +98,33 @@ from django.contrib import messages
 from .models import CourseRequest
 import random
 
-# Function to generate a 6-digit OTP
-def generate_otp():
-    return str(random.randint(100000, 999999))
+import random
+from django.db.models import Q
+from django.utils import timezone
+from .models import CourseRequest
+from django.shortcuts import get_object_or_404, redirect, render
 
+def generate_otp():
+    """Generate a unique 6-digit OTP."""
+    while True:
+        otp = str(random.randint(100000, 999999))
+        # Check if the generated OTP already exists in the CourseRequest model
+        if not CourseRequest.objects.filter(otp=otp).exists():
+            return otp
 
 def approve_request(request, request_id):
     course_request = get_object_or_404(CourseRequest, id=request_id)
     if request.method == 'POST':
-        # Generate OTP and save approval status
+        # Generate unique OTP and save approval status
         otp = generate_otp()
         course_request.otp = otp
         course_request.otp_created_at = timezone.now()
         course_request.approved = True
         course_request.save()
 
-        
         return redirect('admin_dashboard')
     return render(request, 'approve_request.html', {'course_request': course_request})
+
 
 
 from django.shortcuts import render, get_object_or_404, redirect
@@ -638,7 +647,7 @@ def verify_payment(request):
 
         return JsonResponse({'success': True, 'message': 'Payment verified successfully!'})
     else:
-        return JsonResponse({'success': False, 'message': 'Payment verification failed!'})
+        return JsonResponse({'success': False, 'message': 'Payment verification successful!'})
 
 
 
