@@ -13,11 +13,7 @@ urlpatterns = [
     path('register', views.register, name='register'),
     path('login', views.user_login, name='login'),
     path('courses', views.courses, name='courses'),
-    path('request-access/<int:course_id>/', views.request_access, name='request_access'),
-    path('otp-entry/', views.otp_entry, name='otp_entry'),
     path('admin-dashboard1912officials/', views.admin_dashboard, name='admin_dashboard'),
-    path('approve-request/<int:request_id>/', views.approve_request, name='approve_request'),
-    path('courses/<int:course_id>/', views.course_detail, name='course_detail'),
     path('chat/', views.chat, name='chat'),
     path('chat/get_messages/', views.get_chat_messages, name='get_chat_messages'),
     path('login-chat/', views.login_for_chat, name='login_chat'),
@@ -33,6 +29,11 @@ urlpatterns = [
     path('get-course-content/<str:file_key>/', views.get_course_content, name='get_course_content'),
     path('get-main-course-content/<int:main_course_id>/', views.get_main_course_content, name='get_main_course_content'),
     path('verify-payment/', views.verify_payment, name='verify_payment'), 
+
+    path('request-access/<int:course_id>/', views.request_access, name='request_access'),
+    path('approve-request/<int:request_id>/', views.approve_request, name='approve_request'),
+    path('otp-entry/', views.otp_entry, name='otp_entry'),
+    path('course-detail/<int:course_id>/', views.course_detail, name='course_detail'),
 
 ]
  

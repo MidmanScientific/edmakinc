@@ -36,14 +36,22 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+from datetime import timedelta
+
 
 class CourseRequest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    course = models.ForeignKey(MainCourse, on_delete=models.CASCADE)
+    main_course = models.ForeignKey(MainCourse, on_delete=models.CASCADE , null=True,blank =True)  # Linking to MainCourse
     approved = models.BooleanField(default=False)
     otp = models.CharField(max_length=6, blank=True, null=True)
     otp_created_at = models.DateTimeField(null=True, blank=True)  # Timestamp for OTP generation
     otp_expired = models.BooleanField(default=False)  # Field to track expiration status
+
+    def __str__(self):
+        return f"{self.user.username} - {self.main_course} - OTP: {self.otp}"
 
     def is_otp_valid(self):
         """
@@ -60,8 +68,23 @@ class CourseRequest(models.Model):
         self.otp_expired = True
         self.save()
 
-    def __str__(self):
-        return f"{self.user.username} - {self.course.name} - OTP: {self.otp}"
+    def approve_request(self):
+        """
+        Marks the request as approved and generates OTP.
+        """
+        self.approved = True
+        self.otp = self.generate_otp()  # You will need a function to generate OTP
+        self.otp_created_at = timezone.now()
+        self.save()
+
+    def generate_otp(self):
+        """
+        Generates a random 6-digit OTP.
+        """
+        import random
+        otp = ''.join([str(random.randint(0, 9)) for _ in range(6)])
+        return otp
+
 
 
 

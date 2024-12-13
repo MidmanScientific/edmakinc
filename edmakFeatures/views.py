@@ -1,21 +1,28 @@
-from django.shortcuts import render
-
-# Create your views here.
-# views.py
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
-from django.contrib import messages
-from django.utils import timezone
 from .models import Course, CourseRequest, Profile
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+from .utils import generate_presigned_url
+from .utils import generate_presigned_url
 import random
+from django.contrib.auth.models import User
+from .models import ChatMessage, Reply
+from django.utils import timezone
+import json
+from .models import ChatMessage  # Change this line
+from django.contrib.auth.decorators import login_required
+from .models import User, Course
+from django.contrib import messages
+from django.contrib.auth import logout
+from .utils import generate_presigned_url  # Import the function
+from django.http import JsonResponse
+from .utils import generate_presigned_url
+from .utils import AWS_STORAGE_BUCKET_NAME
+from urllib.parse import urlparse
+import requests
+from django.conf import settings
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import MainCourse, Prices, CourseRequest
+from decimal import Decimal
 
-# Function to generate a 6-digit OTP
-
-
-from django.shortcuts import render
-from .models import MainCourse
 
 def homepage(request):
     # Fetch all main courses
@@ -48,12 +55,6 @@ def register(request):
     return render(request, 'register.html')
 
 
-
-from django.shortcuts import render
-from .models import MainCourse
-from .models import MainCourse
-from .utils import generate_presigned_url
-
 @login_required
 def courses(request):
     main_courses = MainCourse.objects.all()
@@ -74,37 +75,36 @@ def courses(request):
     return render(request, 'courses.html', {'main_courses': courses_with_presigned_urls})
 
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import MainCourse, CourseRequest, Course
+from django.contrib import messages
+from django.utils import timezone
+from django.http import Http404
+import random
 
 @login_required
 def request_access(request, course_id):
-    course = get_object_or_404(MainCourse, id=course_id)
-    course_request, created = CourseRequest.objects.get_or_create(user=request.user, course=course)
+    main_course = get_object_or_404(MainCourse, id=course_id)
+    
+    # Create a CourseRequest if it doesn't already exist
+    course_request, created = CourseRequest.objects.get_or_create(user=request.user, main_course=main_course)
     
     if created:
         messages.info(request, 'Your request has been sent to the admin for approval.')
     else:
-        messages.error(request, 'You already have access to this course.')
+        messages.error(request, 'You already have access to this course or have a pending request.')
     
     return redirect('otp_entry')  # Redirecting to OTP entry page
 
-
-
-
-# views.py
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.utils import timezone
-from django.contrib import messages
-from .models import CourseRequest
-import random
 
 # Function to generate a 6-digit OTP
 def generate_otp():
     return str(random.randint(100000, 999999))
 
-
 def approve_request(request, request_id):
     course_request = get_object_or_404(CourseRequest, id=request_id)
+
     if request.method == 'POST':
         # Generate OTP and save approval status
         otp = generate_otp()
@@ -113,20 +113,12 @@ def approve_request(request, request_id):
         course_request.approved = True
         course_request.save()
 
+        # Notify user and admin (add SMS logic if needed)
+        messages.success(request, f"Course request for {course_request.user.username} has been approved, and OTP has been sent.")
         
         return redirect('admin_dashboard')
-    return render(request, 'approve_request.html', {'course_request': course_request})
-
-
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from .models import CourseRequest
-
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.shortcuts import redirect, render
-from django.utils import timezone
+    
+    return render(request, 'admin_dashboard.html', {'course_request': course_request})
 
 @login_required
 def otp_entry(request):
@@ -141,7 +133,7 @@ def otp_entry(request):
         otp_input = request.POST['otp']
         if course_request and course_request.is_otp_valid() and course_request.otp == otp_input:
             request.session['otp_verified'] = True  # Set session OTP verification
-            return redirect('course_detail', course_id=course_request.course.id)
+            return redirect('course_detail', course_id=course_request.main_course.id)
         else:
             messages.error(request, 'Invalid or expired OTP')
             return redirect('otp_entry')
@@ -158,46 +150,39 @@ def otp_entry(request):
         'request_new_otp_url': f"/request-new-otp/{course_request.id}/" if otp_expired and course_request else None
     })
 
-
-
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Course
-
-from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import MainCourse
-
-from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib.auth.decorators import login_required
-from .models import Course
-
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render, redirect
-
-
-from .models import Course
-from .utils import generate_presigned_url
-
+from django.contrib import messages
+from .models import Course, MainCourse, CourseRequest
+from .utils import generate_presigned_url  # Assuming you have a utility function for pre-signed URLs
 @login_required
 def course_detail(request, course_id):
-    # Fetch the selected course by ID
-    course = get_object_or_404(Course, id=course_id)
-
-    # Check session for OTP verification
+    # Ensure the user has a valid OTP session
     if not request.session.get('otp_verified'):
         return redirect(f'/otp-entry/?next=/courses/{course_id}/')
 
-    # Retrieve courses under the main course
-    courses_under_main = Course.objects.filter(main_course=course.main_course)
+    # Fetch the MainCourse associated with the OTP-verified request
+    try:
+        course_request = CourseRequest.objects.filter(user=request.user, approved=True).latest('otp_created_at')
+    except CourseRequest.DoesNotExist:
+        messages.error(request, "No approved course request found.")
+        return redirect('courses')  # Redirect to the list of courses
+
+    # Get the main course from the approved request
+    main_course = course_request.main_course
+
+    # Fetch all courses under the same MainCourse
+    courses_under_main = Course.objects.filter(main_course=main_course)
+
+    # Prepare data for rendering
     courses_with_presigned_urls = []
-
     for course in courses_under_main:
-        # Generate pre-signed URLs for thumbnail and video
-        thumbnail_key = course.thumbnail.name  # Path in S3: 'thumbnails/filename.jpg'
-        video_key = course.video.name  # Path in S3: 'videos/filename.mp4'
+        # Generate pre-signed URLs for video and thumbnail
+        thumbnail_key = course.thumbnail.name
+        video_key = course.video.name
 
-        thumbnail_url = generate_presigned_url(thumbnail_key)
-        video_url = generate_presigned_url(video_key)
+        thumbnail_url = generate_presigned_url(thumbnail_key)  # Generate pre-signed URL for thumbnail
+        video_url = generate_presigned_url(video_key)  # Generate pre-signed URL for video
 
         courses_with_presigned_urls.append({
             "id": course.id,
@@ -208,15 +193,10 @@ def course_detail(request, course_id):
         })
 
     return render(request, 'course_detail.html', {
-        'main_course': course.main_course,
-        'courses': courses_with_presigned_urls
+        'main_course': main_course,
+        'courses': courses_with_presigned_urls,
     })
 
-
-
-
-from django.utils import timezone
-import random
 
 @login_required
 def request_new_otp(request, course_request_id):
@@ -231,57 +211,6 @@ def request_new_otp(request, course_request_id):
     
     return redirect('otp_entry')
 
-
-
-from django.shortcuts import render
-from .models import Course, CourseRequest
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-
-
-
-
-
-# views.py
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Course, CourseRequest
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Course, CourseRequest
-from django.utils import timezone
-from django.contrib import messages
-
-from django.shortcuts import redirect
-from django.utils import timezone
-
-
-
-
-
-
-# views.py
-
-from django.shortcuts import render, redirect
-from .models import ChatMessage
-from django.contrib.auth.decorators import login_required
-
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import ChatMessage, Reply
-from django.utils import timezone
-
-
-# views.py
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from .models import ChatMessage
-from django.utils import timezone
-
-from django.http import JsonResponse
-
 def login_for_chat(request):
     next_url = request.GET.get('next', '/chat/')
     if request.method == 'POST':
@@ -295,12 +224,6 @@ def login_for_chat(request):
             messages.error(request, 'Invalid login credentials for chat access')
     return render(request, 'login_chat.html', {'next': next_url})
 
-
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from .models import ChatMessage
-from django.utils import timezone
-import json
 
 @login_required(login_url='/login-chat/')
 def chat(request):
@@ -317,10 +240,6 @@ def chat(request):
             )
             return JsonResponse({'status': 'Message sent successfully'})
     return render(request, 'chat.html')
-
-
-from django.http import JsonResponse
-from .models import ChatMessage  # Change this line
 
 
 def get_chat_messages(request):
@@ -348,9 +267,6 @@ def get_chat_messages(request):
     return JsonResponse({'messages': message_data})
 
 
-
-
-
 def user_login(request):
     next_url = request.GET.get('next')  # Capture the 'next' parameter from the URL if it exists
     if request.method == 'POST':
@@ -368,15 +284,6 @@ def user_login(request):
             return redirect('login')
     return render(request, 'login.html', {'next': next_url})
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from .models import Course
-
-
-from django.shortcuts import render, redirect
-from .models import MainCourse, Course
-from django.contrib import messages
 
 def admin_dashboard(request):
     # Fetch main courses and courses from the database
@@ -391,10 +298,6 @@ def admin_dashboard(request):
         'pending_requests': pending_requests,
     }
     return render(request, 'admin_dashboard.html', context)
-
-from django.shortcuts import redirect
-from django.contrib import messages
-from .models import MainCourse
 
 def add_main_course(request):
     if request.method == 'POST':
@@ -432,13 +335,6 @@ def upload_course(request):
         return redirect('admin_dashboard')
     return redirect('admin_dashboard')
 
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from .models import User, Course
-
 # Delete User View
 def delete_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
@@ -475,11 +371,6 @@ def delete_course(request, course_id):
     return render(request, 'delete_course.html', {'course': course})
 
 
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from .models import MainCourse
-
 # View for editing MainCourse
 def edit_main_course(request, main_course_id):
     if request.method == 'POST':
@@ -502,18 +393,11 @@ def delete_main_course(request, main_course_id):
     return redirect('admin_dashboard')
 
 
-from django.contrib.auth import logout
-from django.shortcuts import redirect
-
 # Logout view
 def logout_view(request):
     logout(request)
     return redirect('homepage')  # Redirect to the login page after logout
 
-
-
-from django.http import JsonResponse
-from .utils import generate_presigned_url  # Import the function
 
 def get_course_content(request, file_key):
     """
@@ -527,13 +411,6 @@ def get_course_content(request, file_key):
             return JsonResponse({"error": "Could not generate URL"}, status=500)
     return JsonResponse({"error": "Unauthorized"}, status=401)
 
-
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from .models import MainCourse
-from .utils import generate_presigned_url
-from .utils import AWS_STORAGE_BUCKET_NAME
-from urllib.parse import urlparse
 
 def get_main_course_content(request, main_course_id):
     """
@@ -565,26 +442,6 @@ def get_main_course_content(request, main_course_id):
     return JsonResponse({"error": "Unauthorized"}, status=401)
 
 
-
-import requests
-from django.conf import settings
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse
-from .models import MainCourse, Prices, CourseRequest
-from decimal import Decimal
-
-
-from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
-from django.conf import settings
-import requests
-
-from django.shortcuts import render, get_object_or_404
-from .models import MainCourse
-
-from django.shortcuts import render, get_object_or_404
-from .models import MainCourse
-
 def payment_page(request, course_id):
     """
     Render the payment page for a specific course.
@@ -594,17 +451,6 @@ def payment_page(request, course_id):
     price = course.price.price if course.price and hasattr(course.price, 'price') else 0.00
     return render(request, 'payment_page.html', {'course': course, 'price': price})
 
-
-
-import requests
-from django.http import JsonResponse
-from django.conf import settings
-from .models import CourseRequest  # Adjust if needed
-
-import requests
-from django.http import JsonResponse
-from django.conf import settings
-from .models import CourseRequest  # Assuming this model is being used for tracking course requests
 
 def verify_payment(request):
     """

@@ -431,30 +431,30 @@ span{
 
             </section>
 
-            <!-- Pending Approvals Section -->
-            <section id="pending-approvals" class="my-5">
-                <div class="section-header">
-                    <h2>Pending Course Approvals</h2>
-                </div>
-                {% for request in pending_requests %}
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <p><strong>User:</strong> {{ request.user.username }}</p>
-                        <p><strong>Course:</strong> {{ request.course.name }}</p>
-                        <form method="post" action="{% url 'approve_request' request.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-success">Approve & Send OTP</button>
-                        </form>
-                    </div>
-                </div>
-                {% empty %}
-                <p>No pending requests.</p>
-                {% endfor %}
-            </section>
-        </main>
-    </div>
-</div>
-
+     <!-- Pending Approvals Section -->
+     <section id="pending-approvals" class="my-5">
+        <div class="section-header">
+            <h2>Pending Course Approvals</h2>
+        </div>
+        {% for request in pending_requests %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <p><strong>User:</strong> {{ request.user }}</p>
+                <p><strong>Course:</strong> {{request.main_course}}</p>
+                <form method="post" action="{% url 'approve_request' request.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Approve & Send OTP</button>
+                </form>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center mt-4">
+            <p>No pending requests at the moment.</p>
+        </div>
+        {% endfor %}
+    </section>
+    
+    
 
 <!-- Add Assignment Modal -->
 <div class="modal fade" id="addAssignmentModal" tabindex="-1" aria-labelledby="addAssignmentModalLabel" aria-hidden="true">

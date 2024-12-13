@@ -76,7 +76,7 @@
     background-color: #bef0ff;
     padding: 100px 20px;
     position: relative;
-    margin-top: 60px;
+    margin-top: 2px;
   }
   
   .hero-content {
@@ -97,6 +97,7 @@
     color: #666;
     max-width: 600px;
     animation: fadeInUp 2s ease forwards; /* Fade-in for hero subtitle */
+    text-align:left;
   
   }
   
@@ -105,7 +106,7 @@
   /* Continuous Pulse for Hero Image */
   .hero-image {
     width: 100%;
-    max-width: 600px;
+    max-width: 430px;
     animation: fadeInUp 3.5s ease forwards, continuousPulse 3.5s ease-in-out infinite;
   }
   
@@ -235,6 +236,9 @@
     .about-programs h2 {
         font-size: 1.5rem;
     }
+    .hero-subtitle {
+      text-align:left;
+    }
   
     .program-item {
         padding: 0.8rem;
@@ -267,6 +271,9 @@
   @media(max-width:288px){
     .icon1{
       font-size:0.2rem;
+    }
+    .hero-subtitle {
+      text-align:left;
     }
   }
   

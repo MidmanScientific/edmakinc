@@ -235,31 +235,54 @@ body {
     </div>
 </nav>
 
-
 <div class="container">
     <div class="row">
         {% for course in courses %}
         <div class="col-md-4">
             <div class="course-container">
-                <div class="course-media">
+                <div class="course-media position-relative">
                     <!-- Video Player with Pre-signed URL -->
-                    <video id="courseVideo{{ forloop.counter }}" class="course-video" controls controlslist="nodownload">
+                    <video 
+                        id="courseVideo{{ forloop.counter }}" 
+                        class="course-video" 
+                        controls 
+                        controlslist="nodownload"
+                        onplay="hideThumbnail('{{ forloop.counter }}')">
                         <source src="{{ course.video_url }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
 
                     <!-- Overlay Thumbnail with Pre-signed URL -->
-                    <div id="thumbnailOverlay{{ forloop.counter }}" 
-                         class="video-thumbnail-overlay" 
-                         style="background-image: url('{{ course.thumbnail_url }}');"></div>
+                    <div 
+                        id="thumbnailOverlay{{ forloop.counter }}" 
+                        class="video-thumbnail-overlay position-absolute w-100 h-100" 
+                        style="background-image: url('{{ course.thumbnail_url }}'); 
+                               background-size: cover; 
+                               background-position: center;">
+                    </div>
                 </div>
-                <h2 class="course-title">{{ course.name }}</h2>
+                <h2 class="course-title mt-3">{{ course.name }}</h2>
                 <p class="course-description">{{ course.description }}</p>
             </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center">No videos available for this course. Please check back later!</p>
         </div>
         {% endfor %}
     </div>
 </div>
+
+
+<script>
+    // Function to hide the thumbnail when the video starts playing
+    function hideThumbnail(counter) {
+        const overlay = document.getElementById(`thumbnailOverlay${counter}`);
+        if (overlay) {
+            overlay.style.display = 'none';
+        }
+    }
+</script>
 
     
     <div id="timerWarning" class="timer-warning">
