@@ -98,41 +98,27 @@ def request_access(request, course_id):
     return redirect('otp_entry')  # Redirecting to OTP entry page
 
 
-import random
-from django.db.models import Q
-from django.utils import timezone
-from .models import CourseRequest
-from django.shortcuts import get_object_or_404, redirect, render
-
+# Function to generate a 6-digit OTP
 def generate_otp():
     return str(random.randint(100000, 999999))
-
 
 def approve_request(request, request_id):
     course_request = get_object_or_404(CourseRequest, id=request_id)
 
     if request.method == 'POST':
-        # Generate unique OTP and save approval status
+        # Generate OTP and save approval status
         otp = generate_otp()
         course_request.otp = otp
         course_request.otp_created_at = timezone.now()
         course_request.approved = True
         course_request.save()
 
+        # Notify user and admin (add SMS logic if needed)
+        messages.success(request, f"Course request for {course_request.user.username} has been approved, and OTP has been sent.")
         
         return redirect('admin_dashboard')
-    return render(request, 'approve_request.html', {'course_request': course_request})
-
-
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from .models import CourseRequest
-
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.shortcuts import redirect, render
-from django.utils import timezone
+    
+    return render(request, 'admin_dashboard.html', {'course_request': course_request})
 
 @login_required
 def otp_entry(request):
@@ -498,7 +484,7 @@ def verify_payment(request):
 
         return JsonResponse({'success': True, 'message': 'Payment verified successfully!'})
     else:
-        return JsonResponse({'success': False, 'message': 'Payment verification successful!'})
+        return JsonResponse({'success': False, 'message': 'Payment verification failed!'})
 
 
 
