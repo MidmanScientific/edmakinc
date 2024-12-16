@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import dj_database_url
 from decouple import config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -154,4 +155,6 @@ AWS_S3_REGION_NAME=config("AWS_S3_REGION_NAME")
 AWS_QUERYSTRING_EXPIRE = config('AWS_QUERYSTRING_EXPIRE', cast=int) 
 PAYSTACK_SECRET_KEY=config("PAYSTACK_SECRET_KEY")
 PAYSTACK_PUBLIC_KEY=config("PAYSTACK_PUBLIC_KEY")
+
+
 
