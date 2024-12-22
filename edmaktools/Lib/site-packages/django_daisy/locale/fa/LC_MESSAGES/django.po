@@ -1,0 +1,354 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-08 13:17+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: logentry_admin.py:25 templates/admin/index.html:77
+#: templates/admin/object_history.html:27
+msgid "Action"
+msgstr "عملیات"
+
+#: module_settings.py:30
+#, fuzzy
+#| msgid "Action"
+msgid "Authentication"
+msgstr "اعتبارسنجی"
+
+#: templates/admin/404.html:4 templates/admin/404.html:8
+msgid "Page not found"
+msgstr "صفحه یافت نشد"
+
+#: templates/admin/404.html:10
+msgid "We’re sorry, but the requested page could not be found."
+msgstr "متاسفانه صفحه مورد نظر شما یافت نشد"
+
+#: templates/admin/500.html:6 templates/admin/app_index.html:9
+#: templates/admin/auth/user/change_password.html:21
+#: templates/admin/delete_selected_confirmation.html:16
+#: templates/admin/object_history.html:7
+#: templates/admin/registration/password_reset_complete.html:6
+#: templates/admin/registration/password_reset_confirm.html:7
+#: templates/admin/registration/password_reset_done.html:6
+#: templates/admin/registration/password_reset_form.html:7
+#: templates/admin_doc/bookmarklets.html:6 templates/admin_doc/index.html:6
+#: templates/admin_doc/missing_docutils.html:6
+#: templates/admin_doc/model_detail.html:20
+#: templates/admin_doc/model_index.html:8
+#: templates/admin_doc/template_detail.html:6
+#: templates/admin_doc/template_filter_index.html:7
+#: templates/admin_doc/template_tag_index.html:7
+#: templates/admin_doc/view_detail.html:6 templates/admin_doc/view_index.html:7
+#: templates/registration/password_reset_complete.html:6
+#: templates/registration/password_reset_confirm.html:7
+#: templates/registration/password_reset_done.html:6
+#: templates/registration/password_reset_form.html:7
+msgid "Home"
+msgstr "خانه"
+
+#: templates/admin/500.html:7
+msgid "Server error"
+msgstr "خطای سرور"
+
+#: templates/admin/500.html:11
+msgid "Server error (500)"
+msgstr "خطای سرور (500)"
+
+#: templates/admin/500.html:14
+msgid "Server Error <em>(500)</em>"
+msgstr "خطای سرور <em>(500)</em>"
+
+#: templates/admin/500.html:15
+msgid "There’s been an error. It’s been reported to the site administrators via email and should be fixed shortly. Thanks for your patience."
+msgstr "یک خطا رخ داده است. به مدیران سایت گزارش شده و به زودی برطرف می‌شود. از صبوری شما سپاسگزاریم."
+
+#: templates/admin/actions.html:5
+msgid "Actions"
+msgstr "عملیات‌ها"
+
+#: templates/admin/actions.html:12
+msgid "Run the selected action"
+msgstr "اجرای عملیات انتخابی"
+
+#: templates/admin/actions.html:13
+msgid "Go"
+msgstr "اجرا"
+
+#: templates/admin/auth/user/add_form.html:6
+msgid "First, enter a username and password. Then, you’ll be able to edit more user options."
+msgstr "ابتدا نام کاربری و رمز عبور را وارد کنید، سپس می‌توانید گزینه‌های بیشتر کاربر را ویرایش کنید."
+
+#: templates/admin/auth/user/add_form.html:8
+msgid "Enter a username and password."
+msgstr "نام کاربری و رمز عبور را وارد کنید."
+
+#: templates/admin/auth/user/change_password.html:27
+#: templates/admin/auth/user/change_password.html:75
+#: templates/admin/parts/navbar.html:111
+msgid "Change password"
+msgstr "تغییر رمز عبور"
+
+#: templates/admin/auth/user/change_password.html:43
+#: templates/admin/login.html:28
+#: templates/admin/registration/password_change_form.html:15
+#: templates/registration/password_change_form.html:15
+msgid "Please correct the error below."
+msgid_plural "Please correct the errors below."
+msgstr[0] "لطفاً خطا را در زیر اصلاح کنید."
+msgstr[1] "لطفاً خطاهای زیر را اصلاح کنید."
+
+#: templates/admin/auth/user/change_password.html:44
+#: templates/admin/registration/password_change_form.html:16
+#: templates/registration/password_change_form.html:16
+msgid "Please correct the errors below."
+msgstr "لطفاً خطاهای زیر را اصلاح کنید."
+
+#: templates/admin/auth/user/change_password.html:49
+#, python-format
+msgid "Enter a new password for the user <strong>%(username)s</strong>."
+msgstr "یک رمز عبور جدید برای کاربر <strong>%(username)s</strong> وارد کنید."
+
+#: templates/admin/base.html:14 templates/admin/base_site.html:4
+msgid "Django site admin"
+msgstr "مدیریت سایت Django"
+
+#: templates/admin/base_site.html:8 templates/admin/base_site.html:19
+msgid "Django administration"
+msgstr "مدیریت Django"
+
+#: templates/admin/change_form.html:25
+#: templates/admin/change_form_22222.html:24
+#: templates/admin/change_list.html:35
+#: templates/admin/delete_confirmation.html:14
+#: templates/admin/parts/breadcrumb.html:8 templates/admin/parts/navbar.html:21
+#: templates/admin/parts/sidebar.html:20
+msgid "Dashboard"
+msgstr "داشبورد"
+
+#: templates/admin/change_form.html:34
+#: templates/admin/change_form_22222.html:33
+#, python-format
+msgid "Add %(name)s"
+msgstr "افزودن %(name)s"
+
+#: templates/admin/change_form_object_tools.html:6
+#: templates/admin/form_history_tools.html:6 templates/admin/index.html:69
+#: templates/admin/object_history.html:11
+msgid "History"
+msgstr "تاریخچه"
+
+#: templates/admin/change_form_object_tools.html:11
+#: templates/admin/edit_inline/stacked.html:40
+#: templates/admin/edit_inline/tabular.html:63
+#: templates/admin/form_history_tools.html:10
+msgid "View on site"
+msgstr "نمایش در سایت"
+
+#: templates/admin/change_list.html:96 templates/admin/submit_line.html:11
+#: templates/admin/submit_line.html:52
+msgid "Save"
+msgstr "ذخیره"
+
+#: templates/admin/change_list.html:140
+msgid "Filter"
+msgstr "فیلتر"
+
+#: templates/admin/change_list.html:142
+msgid "Apply"
+msgstr "اعمال"
+
+#: templates/admin/change_list.html:150 templates/admin/change_list.html:156
+msgid "Show counts"
+msgstr "نمایش تعداد"
+
+#: templates/admin/change_list.html:168
+msgid "Clear all filters"
+msgstr "پاک کردن تمام فیلترها"
+
+#: templates/admin/change_list_results.html:69
+msgid "Empty Result"
+msgstr "نتیجه‌ای یافت نشد"
+
+#: templates/admin/change_list_results.html:72
+msgid "Remove Filters"
+msgstr "حذف فیلتر"
+
+#: templates/admin/delete_confirmation.html:30
+#, python-format
+msgid "Deleting the %(object_name)s '%(escaped_object)s' would result in deleting related objects, but your account doesn't have permission to delete the following types of objects:"
+msgstr "حذف %(object_name)s '%(escaped_object)s' به حذف اشیاء مرتبط منجر می‌شود، اما حساب شما اجازه حذف اشیاء از نوع زیر را ندارد:"
+
+#: templates/admin/delete_confirmation.html:57
+#: templates/admin/delete_selected_confirmation.html:62
+msgid "Yes, I’m sure"
+msgstr "بله، مطمئنم"
+
+#: templates/admin/delete_confirmation.html:58
+#: templates/admin/delete_selected_confirmation.html:63
+msgid "No, take me back"
+msgstr "خیر، به من بازگردان"
+
+#: templates/admin/edit_inline/tabular.html:33
+#: templates/admin/edit_inline/tabular_flex.html:17
+msgid "Delete?"
+msgstr "حذف؟"
+
+#: templates/admin/includes/object_delete_summary.html:2
+msgid "Summary"
+msgstr "خلاصه"
+
+#: templates/admin/login.html:80
+msgid "Forgotten your password or username?"
+msgstr "رمزعبور یا نام کاربری خود را فراموش کرده‌اید؟"
+
+#: templates/admin/login.html:86
+#: templates/admin/registration/password_reset_complete.html:18
+#: templates/registration/password_reset_complete.html:18
+msgid "Log in"
+msgstr "ورود"
+
+#: templates/admin/object_history.html:25
+msgid "Date/time"
+msgstr "تاریخ/زمان"
+
+#: templates/admin/object_history.html:26
+msgid "User"
+msgstr "کاربر"
+
+#: templates/admin/object_history.html:61
+msgid "This object doesn’t have a change history. It probably wasn’t added via this admin site."
+msgstr "برای این شیء تاریخچه‌ی تغییراتی وجود ندارد. احتمالاً این شیء از طریق این سایت مدیریتی افزوده نشده است."
+
+#: templates/admin/pagination.html:9
+msgid "Previous"
+msgstr "قبلی"
+
+#: templates/admin/pagination.html:12
+msgid "Next"
+msgstr "بعدی"
+
+#: templates/admin/pagination.html:42
+msgid "Show all"
+msgstr "نمایش همه"
+
+#: templates/admin/parts/navbar.html:115
+msgid "Log out"
+msgstr "خروج"
+
+#: templates/admin/parts/navbar.html:119
+msgid "View site"
+msgstr "نمایش سایت"
+
+#: templates/admin/registration/password_change_done.html:9
+#: templates/registration/password_change_done.html:9
+msgid "Your password was changed."
+msgstr "رمزعبور شما تغییر کرد."
+
+#: templates/admin/registration/password_change_form.html:20
+#: templates/registration/password_change_form.html:20
+msgid "Please enter your old password, for security’s sake, and then enter your new password twice so we can verify you typed it in correctly."
+msgstr "لطفاً به دلایل امنیتی رمزعبور قدیمی خود را وارد کنید و سپس دوباره رمزعبور جدید خود را وارد کنید تا اطمینان حاصل کنیم که آن را به درستی وارد کرده‌اید."
+
+#: templates/admin/registration/password_reset_complete.html:16
+#: templates/registration/password_reset_complete.html:16
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr "رمزعبور شما تنظیم شد. می‌توانید ادامه دهید و وارد شوید."
+
+#: templates/admin/registration/password_reset_confirm.html:8
+#: templates/registration/password_reset_confirm.html:8
+msgid "Password reset confirmation"
+msgstr "تایید بازنشانی رمزعبور"
+
+#: templates/admin/registration/password_reset_confirm.html:18
+#: templates/registration/password_reset_confirm.html:18
+msgid "Please enter your new password twice so we can verify you typed it in correctly."
+msgstr "لطفاً دوباره رمزعبور جدید خود را وارد کنید تا اطمینان حاصل کنیم که آن را به درستی وارد کرده‌اید."
+
+#: templates/admin/registration/password_reset_form.html:16
+#: templates/registration/password_reset_form.html:16
+msgid "Forgotten your password? Enter your email address below, and we’ll email instructions for setting a new one."
+msgstr "رمزعبور خود را فراموش کرده‌اید؟ آدرس ایمیل خود را در زیر وارد کنید، و ما دستورالعمل‌ها برای تنظیم یک رمزعبور جدید به شما ایمیل خواهیم کرد."
+
+#: templates/admin/registration/password_reset_form.html:22
+#: templates/registration/password_reset_form.html:22
+msgid "Email address:"
+msgstr "آدرس ایمیل:"
+
+#: templates/admin/registration/password_reset_form.html:25
+#: templates/registration/password_reset_form.html:25
+msgid "Reset my password"
+msgstr "بازنشانی رمزعبور من"
+
+#: templates/admin/search_form.html:16
+msgid "Search along"
+msgstr "جستجو در"
+
+#: templates/admin/search_form.html:20
+msgid "Search"
+msgstr "جستجو"
+
+#: templates/admin/submit_line.html:7 templates/admin/submit_line.html:60
+msgid "Save as new"
+msgstr "ذخیره به عنوان جدید"
+
+#: templates/admin/submit_line.html:17 templates/admin/submit_line.html:65
+msgid "Save and continue editing"
+msgstr "ذخیره و ادامه ویرایش"
+
+#: templates/admin/submit_line.html:18 templates/admin/submit_line.html:66
+msgid "Save and view"
+msgstr "ذخیره و مشاهده"
+
+#: templates/admin/submit_line.html:25 templates/admin/submit_line.html:73
+msgid "Save and add another"
+msgstr "ذخیره و افزودن دیگری"
+
+#: templates/admin/submit_line.html:37 templates/admin/submit_line.html:81
+#: templates/admin/widgets/related_widget_wrapper.html:43
+#: templates/admin/widgets/related_widget_wrapper_.html:43
+msgid "Delete"
+msgstr "حذف"
+
+#: templates/admin/submit_line.html:44 templates/admin/submit_line.html:92
+msgid "Close"
+msgstr "بستن"
+
+#: templates/admin/widgets/related_widget_wrapper.html:14
+#: templates/admin/widgets/related_widget_wrapper_.html:14
+msgid "Options"
+msgstr "گزینه‌ها"
+
+#: templates/admin/widgets/related_widget_wrapper.html:32
+#: templates/admin/widgets/related_widget_wrapper_.html:32
+#, python-format
+msgid "Add another %(model)s"
+msgstr "افزودن یک %(model)s دیگر"
+
+#: templates/admin/widgets/related_widget_wrapper.html:33
+#: templates/admin/widgets/related_widget_wrapper_.html:33
+msgid "Add"
+msgstr "ایجاد"
+
+#: templates/admin/widgets/related_widget_wrapper.html:42
+#: templates/admin/widgets/related_widget_wrapper_.html:42
+#, python-format
+msgid "Delete selected %(model)s"
+msgstr "حذف %(model)s انتخابی"
+
+#: templates/admin/widgets/related_widget_wrapper.html:51
+#: templates/admin/widgets/related_widget_wrapper_.html:51
+#, python-format
+msgid "View selected %(model)s"
+msgstr "نمایش %(model)s انتخابی"

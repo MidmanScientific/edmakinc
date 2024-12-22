@@ -1,0 +1,64 @@
+{% load i18n %}
+<div id="sidebar" class="sidebar bg-base-100 border-base-200 border-r w-56  hidden xl:block lg:block">
+    <!-- Sidebar header with logo -->
+    <a class="flex h-16 items-center justify-center" href="{% url 'admin:index' %}">
+        <div class="inline">
+            <img loading="lazy" width="50" height="24" class="inline" src="{{ logo }}">
+        </div>
+        <div class="inline">
+            {{ site_title|default:'Django Daisy' }}
+        </div>
+    </a>
+
+    <!-- Sidebar menu -->
+    <ul class="menu rounded-box w-56">
+        <!-- Dashboard link -->
+        <li>
+            <a href="{% url 'admin:index' %}">
+                <i class="fa fa-th"></i>
+                {% trans 'Dashboard' %}
+            </a>
+        </li>
+
+        <!-- App list -->
+        {% for app in app_list %}
+            {% if not app.apps %}
+                {% if app.divider_title %}
+                    <div class="divider text-base-content/40 menu-title divider-start">{{ app.divider_title|safe }}</div>
+                {% endif %}
+
+                {% if app.models|length == 1 %}
+                    <li>
+                        <a class="{% if app.models.0.admin_url in request.path|urlencode %} active{% endif %}" href="{{ app.models.0.admin_url }}">
+                            <i class="{{ app.icon }}"></i>
+                            {{ app.name }}
+                        </a>
+                    </li>
+
+                {% else %}
+                    <li class="mb-2">
+                        <details {% if app.app_url in request.path|urlencode %} open {% endif %}>
+                            <summary>
+                                <i class="{{ app.icon }}"></i>
+                                {{ app.name }}
+                            </summary>
+                            <ul>
+                                {% for model in app.models %}
+                                    <li class="model-{{ model.object_name|lower }}">
+                                        <a class="{% if model.admin_url in request.path|urlencode %} active {% endif %}" href="{{ model.admin_url }}">
+                                            {{ model.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </details>
+                    </li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+
+{% if not app_list %}
+    <p>{% translate 'You don’t have permission to view or edit anything.' %}</p>
+{% endif %}
