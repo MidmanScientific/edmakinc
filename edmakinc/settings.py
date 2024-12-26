@@ -138,15 +138,14 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 import os
 
-#MEDIA_URL = '/media/'  
-# MEDIA_ROOT = '/var/media'  
+ 
 SESSION_COOKIE_AGE = 60 *55
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 LOGIN_URL = 'login'  
 
 
 
-DEFAULT_FILE_STORAGE="storages.backends.s3boto3.S3Boto3Storage"
+DEFAULT_FILE_STORAGE=config("DEFAULT_FILE_STORAGE")
 AWS_ACCESS_KEY_ID=config("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY=config("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME=config("AWS_STORAGE_BUCKET_NAME")
@@ -158,5 +157,7 @@ PAYSTACK_SECRET_KEY=config("PAYSTACK_SECRET_KEY")
 PAYSTACK_PUBLIC_KEY=config("PAYSTACK_PUBLIC_KEY")
 
 
-MEDIA_ROOT= BASE_DIR/'media'
+
+
+
 MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/"
