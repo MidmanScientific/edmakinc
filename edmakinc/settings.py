@@ -132,9 +132,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS= (os.path.join(BASE_DIR/'static'),)
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-MEDIA_ROOT= BASE_DIR / 'media'
-MEDIA_URL= '/media/'
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -162,4 +159,4 @@ PAYSTACK_PUBLIC_KEY=config("PAYSTACK_PUBLIC_KEY")
 
 
 
-
+MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/"
