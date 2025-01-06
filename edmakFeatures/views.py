@@ -15,7 +15,7 @@ from django.contrib.auth import logout
 from .utils import generate_presigned_url  # Import the function
 from django.http import JsonResponse
 from .utils import generate_presigned_url
-from .utils import AWS_STORAGE_BUCKET_NAME
+
 from urllib.parse import urlparse
 import requests
 from django.conf import settings
