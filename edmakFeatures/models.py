@@ -17,6 +17,7 @@ class MainCourse(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     thumbnail = models.ImageField(upload_to='main_courses/thumbnails/')
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -27,6 +28,7 @@ class Course(models.Model):
     video = models.FileField(upload_to='videos/')
     thumbnail = models.ImageField(upload_to='thumbnails/')
     main_course = models.ForeignKey(MainCourse, on_delete=models.CASCADE, related_name="courses")
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return self.courses

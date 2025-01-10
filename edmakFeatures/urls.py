@@ -5,7 +5,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 from . import views
+from django.contrib.sitemaps.views import sitemap
+from .sitemaps import StaticViewSitemap, MainCourseSitemap, CourseSitemap
 
+sitemaps = {
+    'static': StaticViewSitemap,
+    'main_courses': MainCourseSitemap,
+    'courses': CourseSitemap,
+}
 
 urlpatterns = [
     path('', views.homepage, name='homepage'),  # Homepage
@@ -34,6 +41,7 @@ urlpatterns = [
     path('approve-request/<int:request_id>/', views.approve_request, name='approve_request'),
     path('otp-entry/', views.otp_entry, name='otp_entry'),
     path('course-detail/<int:course_id>/', views.course_detail, name='course_detail'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 
 ]
  

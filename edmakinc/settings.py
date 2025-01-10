@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'edmakFeatures.apps.EdmakfeaturesConfig',
-    'storages'
+    'storages',
+    'django.contrib.sitemaps',
     
 ]
 
