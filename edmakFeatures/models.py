@@ -21,6 +21,10 @@ class MainCourse(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('course_detail', args=[self.id])
 
 class Course(models.Model):
     courses = models.CharField(max_length=255)
@@ -32,6 +36,10 @@ class Course(models.Model):
 
     def __str__(self):
         return self.courses
+    
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('course_detail', args=[self.id])
 
 
 from django.db import models
